@@ -1,7 +1,5 @@
 # QuantDesk Examples
 
-Last Updated: 2025-10-25
-
 This directory contains working code examples for integrating with QuantDesk's public APIs and testing interfaces.
 
 ## 📁 Directory Structure
@@ -9,49 +7,53 @@ This directory contains working code examples for integrating with QuantDesk's p
 ```
 examples/
 ├── devnet-testing/          # Solana devnet testing examples
-├── api-integration/         # API integration examples
-├── wallet-integration/      # Wallet connection examples
+├── api-integration/         # REST gateway integration examples
+├── typescript/              # Typed order-flow examples
+├── ai-integration/          # Agent context integration examples
 └── README.md               # This file
 ```
+
+Standalone starter files also live at the root of `examples/`: `basic-trading-demo.js`, `api-integration-example.ts`, and `smart-contract-interactions.ts`.
 
 ## 🚀 Quick Start
 
 ### Prerequisites
 - Node.js 20+
-- Solana wallet
-- QuantDesk services running locally
+- **Trading in the app:** a Privy-managed session (wallet, email, or Telegram MPC) — see [Start trading in 5 minutes](https://docs.quantdesk.app/docs/getting-started/start-trading-in-5-minutes)
+- **Running these scripts:** a reachable QuantDesk gateway (`QD_API`); devnet examples use ephemeral keypairs for protocol testing, not Privy
 
 ### Installation
 ```bash
 # Install dependencies for examples
 cd examples
-npm install
+pnpm install
 
 # Run examples
-npm run devnet-testing
-npm run api-integration
-npm run wallet-integration
+pnpm run devnet-testing
+pnpm run api-integration
+pnpm run wallet-integration
 ```
 
 ## 📚 Available Examples
 
 ### 1. Devnet Testing Examples (`devnet-testing/`)
-- Basic service health testing
-- Wallet integration and funding
+- Basic gateway health testing
+- Devnet keypair + airdrop checks (`wallet-integration.js`) — **not** the in-app Privy wallet flow
 - QuantDesk program interaction
-- Real-time data fetching
+- Real-time data fetching via `$QD_API`
 
 ### 2. API Integration Examples (`api-integration/`)
-- Data ingestion API usage
+- Data ingestion API usage (`data-ingestion-examples.js`)
 - Service health monitoring
 - Market data retrieval
-- Whale transaction monitoring
 
-### 3. Wallet Integration Examples (`wallet-integration/`)
-- Solana wallet connection
-- Transaction signing
-- Balance checking
-- Program interaction
+### 3. TypeScript Examples (`typescript/`)
+- Basic trading flow (`basic-trading.ts`)
+- Advanced orders (`advanced-orders.ts`)
+
+### 4. AI Integration Examples (`ai-integration/`)
+- Portfolio analysis (`ai-portfolio-analysis.ts`)
+- Sentiment analysis (`ai-sentiment-analysis.ts`)
 
 ## 🔧 Running Examples
 
@@ -69,8 +71,8 @@ node data-ingestion-examples.js
 
 ### Wallet Integration
 ```bash
-cd examples/wallet-integration
-node wallet-connection.js
+cd examples/devnet-testing
+node wallet-integration.js
 ```
 
 ## 📖 Example Documentation
@@ -78,7 +80,6 @@ node wallet-connection.js
 Each example directory contains:
 - **README.md**: Detailed explanation of the example
 - **Working code**: Copy-paste ready examples
-- **Test files**: Integration tests for validation
 - **Configuration**: Environment setup instructions
 
 ## 🤝 Contributing Examples
@@ -89,6 +90,8 @@ We welcome new examples! Please:
 3. Add tests for your examples
 4. Ensure examples work out-of-the-box
 
+See the [contributing guide](https://docs.quantdesk.app/docs/community/contributing) for code-quality rules (linting, secret scanning).
+
 ## 📄 License
 
-Examples are provided under the same Apache License 2.0 as the main project.
+Examples are provided under the MIT License, the same as the main project.

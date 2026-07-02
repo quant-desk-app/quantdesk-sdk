@@ -1,33 +1,39 @@
 # Devnet Testing Examples
 
-Last Updated: 2025-10-25
-
 This directory contains working examples for testing QuantDesk's Solana devnet integration.
 
 ## 🚀 Quick Start
 
 ```bash
 # Install dependencies
-npm install
+pnpm install
 
 # Run all examples
-npm run test-all
+pnpm run test-all
 
 # Run specific examples
-npm run basic-service-test
-npm run wallet-integration
-npm run program-interaction
+pnpm run basic-service-test
+pnpm run wallet-integration
+pnpm run api-integration
+```
+
+All HTTP examples read the gateway origin from the `QD_API` environment variable:
+
+```bash
+export QD_API=https://api.quantdesk.app
 ```
 
 ## 📁 Examples
 
 ### 1. Basic Service Testing (`basic-service-test.js`)
-Tests the health of all QuantDesk services.
+Tests the health of the QuantDesk gateway.
 
 ```javascript
+const QD_API = process.env.QD_API;
+
 const services = [
-  { name: 'Backend', url: 'http://localhost:3002/api/health' },
-  { name: 'Data Ingestion', url: 'http://localhost:3003/health' }
+  { name: 'Gateway health', url: `${QD_API}/health` },
+  { name: 'API health', url: `${QD_API}/api/health` }
 ];
 
 async function testServices() {
@@ -44,7 +50,9 @@ async function testServices() {
 ```
 
 ### 2. Wallet Integration (`wallet-integration.js`)
-Demonstrates wallet creation, funding, and balance checking.
+**Devnet script only** — generates an ephemeral keypair and requests a devnet airdrop for protocol testing.
+
+> **Production wallet auth:** The QuantDesk trading terminal uses **[Privy](https://docs.privy.io/)** — connect an external Solana wallet, email, or Telegram MPC from the in-app auth modal. That flow is **not** what this script demonstrates; it exists for automated devnet checks only.
 
 ```javascript
 import { Connection, Keypair } from '@solana/web3.js';
@@ -52,16 +60,16 @@ import { Connection, Keypair } from '@solana/web3.js';
 async function testWalletIntegration() {
   const connection = new Connection('https://api.devnet.solana.com', 'confirmed');
   const wallet = Keypair.generate();
-  
+
   try {
     // Fund wallet with devnet SOL
     const signature = await connection.requestAirdrop(wallet.publicKey, 2 * 1e9);
     await connection.confirmTransaction(signature);
-    
+
     // Check balance
     const balance = await connection.getBalance(wallet.publicKey);
     console.log(`✅ Wallet funded: ${balance / 1e9} SOL`);
-    
+
     return wallet;
   } catch (error) {
     console.error('❌ Wallet funding failed:', error);
@@ -70,7 +78,7 @@ async function testWalletIntegration() {
 }
 ```
 
-### 3. Program Interaction (`program-interaction.js`)
+### 3. Program Interaction
 Tests interaction with the deployed QuantDesk program.
 
 ```javascript
@@ -79,22 +87,22 @@ import { Connection, PublicKey } from '@solana/web3.js';
 async function testQuantDeskProgram() {
   const connection = new Connection('https://api.devnet.solana.com');
   const programId = new PublicKey('C2T3UnvGdHwEkspXJG7JyAhwo6VKQEKjN6eCq69guYSw');
-  
+
   try {
     // Check if program exists
     const accountInfo = await connection.getAccountInfo(programId);
-    
+
     if (!accountInfo) {
       throw new Error('QuantDesk program not found on devnet');
     }
-    
+
     console.log('✅ QuantDesk Program Status:', {
       executable: accountInfo.executable,
       dataLength: accountInfo.data.length,
       balance: `${accountInfo.lamports / 1e9} SOL`,
       owner: accountInfo.owner.toString()
     });
-    
+
     return accountInfo;
   } catch (error) {
     console.error('❌ Program check failed:', error);
@@ -103,23 +111,25 @@ async function testQuantDeskProgram() {
 }
 ```
 
-### 4. Real-Time Data Testing (`realtime-data.js`)
-Tests fetching real-time market data from the data ingestion service.
+### 4. Real-Time Data Testing
+Tests fetching real-time market data from the gateway.
 
 ```javascript
+const QD_API = process.env.QD_API;
+
 async function testRealTimeData() {
   const endpoints = [
-    { name: 'Latest Prices', url: 'http://localhost:3003/api/prices/latest' },
-    { name: 'Whale Transactions', url: 'http://localhost:3003/api/whales/recent?limit=5' },
-    { name: 'Market Summary', url: 'http://localhost:3003/api/market/summary' },
-    { name: 'Wallet Balance', url: 'http://localhost:3003/api/wallet/balance' }
+    { name: 'Latest Prices', url: `${QD_API}/api/prices/latest` },
+    { name: 'Whale Transactions', url: `${QD_API}/api/whales/recent?limit=5` },
+    { name: 'Market Summary', url: `${QD_API}/api/market/summary` },
+    { name: 'Wallet Balance', url: `${QD_API}/api/wallet/balance` }
   ];
-  
+
   for (const endpoint of endpoints) {
     try {
       const response = await fetch(endpoint.url);
       const data = await response.json();
-      
+
       console.log(`✅ ${endpoint.name}:`, {
         success: data.success,
         dataKeys: Object.keys(data.data || {}),
@@ -134,12 +144,13 @@ async function testRealTimeData() {
 
 ## 🧪 Integration Testing
 
-### Complete Integration Test (`integration-test.js`)
-Comprehensive test that validates all components working together.
+A comprehensive test validates all components working together.
 
 ```javascript
 import { describe, it, expect, beforeAll } from 'vitest';
 import { Connection, Keypair, PublicKey } from '@solana/web3.js';
+
+const QD_API = process.env.QD_API;
 
 describe('QuantDesk Devnet Integration', () => {
   let connection: Connection;
@@ -148,7 +159,7 @@ describe('QuantDesk Devnet Integration', () => {
   beforeAll(async () => {
     connection = new Connection('https://api.devnet.solana.com', 'confirmed');
     testWallet = Keypair.generate();
-    
+
     // Fund test wallet
     try {
       const signature = await connection.requestAirdrop(testWallet.publicKey, 2 * 1e9);
@@ -159,31 +170,24 @@ describe('QuantDesk Devnet Integration', () => {
     }
   }, 30000);
 
-  it('should connect to all services', async () => {
-    const services = [
-      'http://localhost:3002/api/health',
-      'http://localhost:3003/health'
-    ];
-
-    for (const service of services) {
-      const response = await fetch(service);
-      expect(response.ok).toBe(true);
-    }
+  it('should reach the gateway', async () => {
+    const response = await fetch(`${QD_API}/health`);
+    expect(response.ok).toBe(true);
   });
 
   it('should interact with QuantDesk program', async () => {
     const programId = new PublicKey('C2T3UnvGdHwEkspXJG7JyAhwo6VKQEKjN6eCq69guYSw');
     const accountInfo = await connection.getAccountInfo(programId);
-    
+
     expect(accountInfo).toBeDefined();
     expect(accountInfo!.executable).toBe(true);
     expect(accountInfo!.owner.toString()).toBe('BPFLoaderUpgradeab1e11111111111111111111111');
   });
 
   it('should fetch real-time data', async () => {
-    const response = await fetch('http://localhost:3003/api/prices/latest');
+    const response = await fetch(`${QD_API}/api/prices/latest`);
     const data = await response.json();
-    
+
     expect(data.success).toBe(true);
     expect(data.data.prices).toHaveProperty('SOL');
     expect(data.data.prices).toHaveProperty('BTC');
@@ -195,34 +199,20 @@ describe('QuantDesk Devnet Integration', () => {
 ## 🔧 Configuration
 
 ### Environment Variables
+
 ```bash
 # .env file
 SOLANA_RPC_URL=https://api.devnet.solana.com
 QUANTDESK_PROGRAM_ID=C2T3UnvGdHwEkspXJG7JyAhwo6VKQEKjN6eCq69guYSw
-BACKEND_URL=http://localhost:3002
-DATA_INGESTION_URL=http://localhost:3003
-```
-
-### Package.json Scripts
-```json
-{
-  "scripts": {
-    "test-all": "node basic-service-test.js && node wallet-integration.js && node program-interaction.js",
-    "basic-service-test": "node basic-service-test.js",
-    "wallet-integration": "node wallet-integration.js",
-    "program-interaction": "node program-interaction.js",
-    "realtime-data": "node realtime-data.js",
-    "integration-test": "vitest integration-test.js"
-  }
-}
+QD_API=https://api.quantdesk.app
 ```
 
 ## 📊 Expected Output
 
 ### Successful Service Test
 ```
-✅ Backend: healthy
-✅ Data Ingestion: healthy
+✅ Gateway health: healthy
+✅ API health: healthy
 ```
 
 ### Successful Wallet Integration
@@ -240,24 +230,12 @@ DATA_INGESTION_URL=http://localhost:3003
 }
 ```
 
-### Successful Real-Time Data
-```
-✅ Latest Prices: { success: true, dataKeys: ['prices', 'timestamp', 'source'] }
-✅ Whale Transactions: { success: true, dataKeys: ['transactions', 'count', 'timestamp'] }
-✅ Market Summary: { success: true, dataKeys: ['totalVolume', 'activeMarkets'] }
-✅ Wallet Balance: { success: true, dataKeys: ['address', 'balance', 'lamports'] }
-```
-
 ## 🚨 Troubleshooting
 
 ### Common Issues
 
-1. **Services not running**
-   ```bash
-   # Start all services
-   cd /path/to/quantdesk
-   pnpm run dev
-   ```
+1. **Gateway unreachable**
+   - Confirm `QD_API` points at a reachable gateway origin.
 
 2. **Wallet funding fails**
    ```bash
@@ -272,5 +250,5 @@ DATA_INGESTION_URL=http://localhost:3003
 ## 📚 Additional Resources
 
 - [Solana Devnet Documentation](https://docs.solana.com/developing/test-validator)
-- [QuantDesk Developer Guide](../docs/DEVELOPER_API_GUIDE.md)
+- [QuantDesk Documentation](https://docs.quantdesk.app)
 - [Solana Web3.js Documentation](https://solana-labs.github.io/solana-web3.js/)

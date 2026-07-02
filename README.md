@@ -9,9 +9,15 @@ The official developer kit for interacting with the QuantDesk high-performance p
 
 ## Installation
 ```bash
-pnpm add @quant-desk-app/sdk
+pnpm add @quantdesk/sdk
 ```
 
 ## Structure
-- `typescript/`: Node.js/TypeScript SDK core.
+- `idl/`: On-chain program interface (Anchor IDL) for the QuantDesk perpetuals program.
+- `typescript/`: Node.js/TypeScript SDK core (`@quantdesk/sdk`).
 - `examples/`: Code samples for API integration, trading bot setup, and on-chain account reading.
+- `scripts/`: Local environment setup helpers.
+
+## License
+
+MIT — see `typescript/package.json`.
