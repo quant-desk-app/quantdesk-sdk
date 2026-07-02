@@ -29,8 +29,9 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
 nvm install 20
 nvm use 20
 
-# Install pnpm
-npm install -g pnpm
+# Enable pnpm via corepack (ships with Node 20+)
+corepack enable
+corepack prepare pnpm@latest --activate
 ```
 
 ### **Step 2: Install Solana CLI**

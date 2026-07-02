@@ -8,8 +8,51 @@
  */
 
 import { QuantDeskSDK } from '@quantdesk/sdk';
-import { MarketAnalysisAgent, RiskManagementAgent } from './examples/mikey-ai-agents';
 import { EventEmitter } from 'events';
+
+// NOTE: Replace this inline stub with your own autonomous agent framework execution loop.
+// These sterile mocks return deterministic dummy signals so the example compiles and
+// runs end-to-end without any external agent dependency.
+
+interface MarketSnapshot {
+  price: number;
+  volume: number;
+  change24h: number;
+}
+
+interface MarketAnalysis {
+  sentiment: 'bullish' | 'bearish' | 'neutral';
+  confidence: number;
+  log: string[];
+}
+
+class MarketAnalysisAgent {
+  private readonly log: string[] = [];
+
+  constructor(private readonly apiKey: string) {}
+
+  async analyzeMarket(symbol: string, snapshot: MarketSnapshot): Promise<MarketAnalysis> {
+    // Dummy heuristic: derive a signal from the 24h change only.
+    const sentiment: MarketAnalysis['sentiment'] =
+      snapshot.change24h > 0 ? 'bullish' : snapshot.change24h < 0 ? 'bearish' : 'neutral';
+    const confidence = Math.min(1, Math.abs(snapshot.change24h) / 5);
+
+    this.log.push(`[analysis] ${symbol} -> ${sentiment} (${confidence.toFixed(2)})`);
+    return { sentiment, confidence, log: [...this.log] };
+  }
+}
+
+class RiskManagementAgent {
+  private readonly log: string[] = [];
+
+  constructor(private readonly apiKey: string) {}
+
+  async assess(symbol: string, proposedSize: number): Promise<{ approved: boolean; log: string[] }> {
+    // Dummy gate: always approve in the stub; wire real risk checks in your framework.
+    this.log.push(`[risk] ${symbol} size=${proposedSize} -> approved`);
+    return { approved: true, log: [...this.log] };
+  }
+}
 
 interface TradingBotConfig {
   symbols: string[];

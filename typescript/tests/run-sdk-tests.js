@@ -122,7 +122,7 @@ const mockQuantDeskClient = {
       timestamp: new Date().toISOString()
     };
   },
-  chatWithMIKEY: async (message, context) => {
+  chatWithAgent: async (message, context) => {
     return {
       response: 'Based on my analysis, SOL-PERP shows strong bullish momentum with increasing volume.',
       confidence: 0.88,
@@ -368,8 +368,8 @@ async function testAPIClientExample() {
     const riskAssessment = await mockQuantDeskClient.getRiskAssessment();
     console.log(`✅ Risk level: ${riskAssessment.overallRisk}`);
     
-    const chatResponse = await mockQuantDeskClient.chatWithMIKEY('What do you think about SOL-PERP?');
-    console.log(`✅ MIKEY response: ${chatResponse.response.substring(0, 50)}...`);
+    const chatResponse = await mockQuantDeskClient.chatWithAgent('What do you think about SOL-PERP?');
+    console.log(`✅ Agent response: ${chatResponse.response.substring(0, 50)}...`);
     
     testResults.set('api-client', {
       name: 'API Client Example',

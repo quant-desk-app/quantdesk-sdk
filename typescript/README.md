@@ -7,20 +7,21 @@ Official TypeScript/JavaScript SDK for QuantDesk Protocol.
 ## Installation
 
 ```bash
-npm install @quantdesk/sdk
+pnpm add @quantdesk/sdk
 ```
+
+> **Wallet auth in the trading app** uses [Privy](https://docs.privy.io/) (external wallet, email, or Telegram MPC). The SDK itself is wallet-agnostic — bring your own signer or use the app's Privy session for browser integrations.
 
 ## Quick Start
 
 ```typescript
 import { QuantDeskClient } from '@quantdesk/sdk'
-import { PhantomWalletAdapter } from '@solana/wallet-adapter-wallets'
 
-// Initialize client
+// Initialize client — point at the public gateway and your RPC
 const client = new QuantDeskClient(
   'https://api.quantdesk.app',
   'https://api.mainnet-beta.solana.com',
-  new PhantomWalletAdapter()
+  yourSigner // wallet-agnostic: Privy session, hardware wallet, or devnet keypair
 )
 
 // Get markets
