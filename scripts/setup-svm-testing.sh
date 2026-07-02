@@ -393,7 +393,7 @@ solana program deploy target/deploy/quantdesk_perp_dex.so --program-id target/de
 
 # Run tests
 echo "Running test suite..."
-npm test
+pnpm test
 
 # Cleanup
 kill $VALIDATOR_PID
@@ -403,65 +403,6 @@ EOF
 
     chmod +x "solana-sandbox/run-tests.sh"
     print_status "SUCCESS" "Test runner script created"
-}
-
-# Function to create comparison analysis script
-create_comparison_script() {
-    print_status "INFO" "Creating Drift comparison analysis script..."
-    
-    cat > "scripts/analyze-vs-drift.sh" << 'EOF'
-#!/bin/bash
-
-# QuantDesk vs Drift Protocol Analysis
-echo "📊 QuantDesk vs Drift Protocol Analysis"
-echo "========================================"
-
-# This script will analyze our protocol against Drift
-# and prepare data for expert analysis
-
-echo "🔍 Analyzing protocol features..."
-echo "📋 Preparing comparison data..."
-echo "📝 Generating analysis report..."
-
-# Create comparison report
-cat > "drift-comparison-report.md" << 'REPORT'
-# QuantDesk vs Drift Protocol Comparison
-
-## Architecture Comparison
-
-### QuantDesk
-- **Collateral Management**: Multi-asset collateral with SOL focus
-- **Trading Engine**: Perpetual futures with cross-margining
-- **Risk Management**: Dynamic margin requirements
-- **Oracle Integration**: Pyth Network integration
-
-### Drift Protocol
-- **Collateral Management**: Multi-asset collateral system
-- **Trading Engine**: Perpetual futures with spot trading
-- **Risk Management**: Sophisticated liquidation system
-- **Oracle Integration**: Multiple oracle providers
-
-## Key Differences
-
-1. **Collateral Types**: QuantDesk focuses on SOL, Drift supports multiple assets
-2. **Trading Features**: Drift has more advanced order types
-3. **Risk Management**: Drift has more sophisticated liquidation logic
-4. **User Experience**: QuantDesk focuses on simplicity
-
-## Recommendations
-
-1. Enhance multi-asset collateral support
-2. Implement advanced order types
-3. Improve liquidation system
-4. Add more trading features
-
-REPORT
-
-echo "✅ Comparison analysis complete"
-EOF
-
-    chmod +x "scripts/analyze-vs-drift.sh"
-    print_status "SUCCESS" "Drift comparison script created"
 }
 
 # Main setup function
@@ -483,17 +424,12 @@ main() {
     # Create test runner
     create_test_runner
     
-    # Create comparison script
-    create_comparison_script
-    
     print_status "SUCCESS" "SVM test environment setup complete!"
     echo ""
     print_status "INFO" "Next steps:"
-    echo "  1. Run CLI validation: ./scripts/validate-protocol-cli.sh"
-    echo "  2. Start SVM tests: ./solana-sandbox/run-tests.sh"
-    echo "  3. Analyze vs Drift: ./scripts/analyze-vs-drift.sh"
-    echo "  4. Get Solana expert analysis via MCP"
-    echo "  5. Prepare for PO/QA validation"
+    echo "  1. Start the local test environment: ./solana-sandbox/run-tests.sh"
+    echo "  2. Review generated tests under ./solana-sandbox/tests"
+    echo "  3. Extend the suite with your own program integration tests"
 }
 
 # Run main function

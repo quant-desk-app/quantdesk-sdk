@@ -1,7 +1,12 @@
 /**
  * API Integration Examples
  * Demonstrates integration with QuantDesk's public APIs
+ *
+ * Configure the gateway origin via the QD_API_URL environment variable.
+ * Falls back to the public production gateway.
  */
+
+const QD_API = process.env.QD_API_URL || 'https://api.quantdesk.app';
 
 /**
  * Data Ingestion API Examples
@@ -13,32 +18,32 @@ async function dataIngestionExamples() {
   const endpoints = [
     {
       name: 'Health Check',
-      url: 'http://localhost:3003/health',
+      url: `${QD_API}/health`,
       description: 'Service health status'
     },
     {
       name: 'Latest Prices',
-      url: 'http://localhost:3003/api/prices/latest',
+      url: `${QD_API}/api/prices/latest`,
       description: 'Real-time market prices'
     },
     {
       name: 'Whale Transactions',
-      url: 'http://localhost:3003/api/whales/recent?limit=10',
+      url: `${QD_API}/api/whales/recent?limit=10`,
       description: 'Recent whale transactions'
     },
     {
       name: 'Market Summary',
-      url: 'http://localhost:3003/api/market/summary',
+      url: `${QD_API}/api/market/summary`,
       description: 'Market overview data'
     },
     {
       name: 'Wallet Balance',
-      url: 'http://localhost:3003/api/wallet/balance',
+      url: `${QD_API}/api/wallet/balance`,
       description: 'Service wallet balance'
     },
     {
       name: 'System Status',
-      url: 'http://localhost:3003/api/status',
+      url: `${QD_API}/api/status`,
       description: 'System status information'
     }
   ];
@@ -76,13 +81,13 @@ async function serviceHealthMonitoring() {
   
   const services = [
     {
-      name: 'Backend API',
-      url: 'http://localhost:3002/api/health',
+      name: 'Gateway API',
+      url: `${QD_API}/api/health`,
       expectedStatus: 'healthy'
     },
     {
-      name: 'Data Ingestion',
-      url: 'http://localhost:3003/health',
+      name: 'Data Health',
+      url: `${QD_API}/health`,
       expectedStatus: 'healthy'
     }
   ];
@@ -139,7 +144,7 @@ async function realTimeDataStreaming() {
     iteration++;
     
     try {
-      const response = await fetch('http://localhost:3003/api/prices/latest');
+      const response = await fetch(`${QD_API}/api/prices/latest`);
       const data = await response.json();
       
       if (data.success) {
@@ -172,17 +177,17 @@ async function errorHandlingExamples() {
   const testCases = [
     {
       name: 'Invalid Endpoint',
-      url: 'http://localhost:3003/api/invalid-endpoint',
+      url: `${QD_API}/api/invalid-endpoint`,
       expectedError: '404'
     },
     {
       name: 'Invalid Parameters',
-      url: 'http://localhost:3003/api/whales/recent?limit=invalid',
+      url: `${QD_API}/api/whales/recent?limit=invalid`,
       expectedError: 'Parameter validation'
     },
     {
       name: 'Service Unavailable',
-      url: 'http://localhost:9999/health',
+      url: 'http://127.0.0.1:9999/health',
       expectedError: 'Connection refused'
     }
   ];
@@ -217,7 +222,7 @@ async function errorHandlingExamples() {
 async function performanceTesting() {
   console.log('⚡ Performance Testing\n');
   
-  const testEndpoint = 'http://localhost:3003/api/prices/latest';
+  const testEndpoint = `${QD_API}/api/prices/latest`;
   const testCount = 10;
   
   console.log(`🔄 Running ${testCount} requests to ${testEndpoint}...`);

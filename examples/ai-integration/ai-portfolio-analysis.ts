@@ -1,12 +1,89 @@
-import { QuantDeskAI } from '@quantdesk/ai-sdk';
+// NOTE: Replace this inline stub with your own autonomous AI agent framework execution loop.
 import { Connection, PublicKey } from '@solana/web3.js';
 
 /**
  * AI-Powered Portfolio Analysis Example
  * 
- * This example demonstrates how to use QuantDesk's AI capabilities
- * for portfolio analysis and recommendations without exposing AI internals.
+ * This example demonstrates how to wire an AI agent into portfolio analysis
+ * and recommendations. `QuantDeskAI` below is an inline mock that mirrors the
+ * expected call signatures with placeholder data so the file compiles and runs
+ * standalone. Swap it for your own AI/agent framework in production.
  */
+
+class QuantDeskAI {
+  private readonly apiKey: string;
+
+  constructor(config: { apiKey: string }) {
+    this.apiKey = config.apiKey;
+    console.log('[QuantDeskAI stub] initialized');
+  }
+
+  async analyzePortfolio(params: {
+    wallet: string;
+    includeRiskAssessment?: boolean;
+    includeRecommendations?: boolean;
+    includeMarketSentiment?: boolean;
+    timeframe?: string;
+  }) {
+    console.log('[QuantDeskAI stub] analyzePortfolio', params.wallet);
+    return {
+      riskScore: 0,
+      recommendations: [] as string[],
+      marketSentiment: 'neutral',
+      portfolioHealth: 'unknown',
+      suggestedActions: [] as string[],
+    };
+  }
+
+  async getTradingRecommendations(params: {
+    wallet: string;
+    riskTolerance: 'low' | 'medium' | 'high';
+    includePositionSizing?: boolean;
+    includeStopLoss?: boolean;
+    timeframe?: string;
+  }) {
+    console.log('[QuantDeskAI stub] getTradingRecommendations', params.wallet, params.riskTolerance);
+    return {
+      positions: [] as string[],
+      positionSizing: [] as number[],
+      stopLossLevels: [] as number[],
+      takeProfitLevels: [] as number[],
+      confidence: 0,
+    };
+  }
+
+  async getMarketSentiment(params: {
+    symbols: string[];
+    timeframe?: string;
+    includeNewsAnalysis?: boolean;
+    includeSocialSentiment?: boolean;
+  }) {
+    console.log('[QuantDeskAI stub] getMarketSentiment', params.symbols.join(','));
+    return {
+      overallSentiment: 'neutral',
+      symbolSentiments: [] as Array<{ symbol: string; sentiment: string }>,
+      newsImpact: [] as string[],
+      socialSentiment: 'neutral',
+      confidence: 0,
+    };
+  }
+
+  async assessRisk(params: {
+    wallet: string;
+    includePositionRisk?: boolean;
+    includeMarketRisk?: boolean;
+    includeLiquidityRisk?: boolean;
+  }) {
+    console.log('[QuantDeskAI stub] assessRisk', params.wallet);
+    return {
+      overallRisk: 'low',
+      positionRisks: [] as string[],
+      marketRisks: [] as string[],
+      liquidityRisks: [] as string[],
+      riskMitigation: [] as string[],
+    };
+  }
+}
 
 export class AIPortfolioAnalyzer {
   private ai: QuantDeskAI;
