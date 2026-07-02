@@ -1,11 +1,88 @@
-import { QuantDeskAI } from '@quantdesk/ai-sdk';
+// NOTE: Replace this inline stub with your own autonomous AI agent framework execution loop.
 
 /**
  * AI-Powered Market Sentiment Analysis Example
  * 
- * This example demonstrates how to use QuantDesk's AI capabilities
- * for market sentiment analysis without exposing AI internals.
+ * This example demonstrates how to wire an AI agent into market sentiment
+ * analysis. `QuantDeskAI` below is an inline mock that mirrors the expected
+ * call signatures with placeholder data so the file compiles and runs
+ * standalone. Swap it for your own AI/agent framework in production.
  */
+
+class QuantDeskAI {
+  private readonly apiKey: string;
+
+  constructor(config: { apiKey: string }) {
+    this.apiKey = config.apiKey;
+    console.log('[QuantDeskAI stub] initialized');
+  }
+
+  async getMarketSentiment(params: {
+    symbols: string[];
+    timeframe?: string;
+    includeNewsAnalysis?: boolean;
+    includeSocialSentiment?: boolean;
+    includeTechnicalAnalysis?: boolean;
+  }) {
+    console.log('[QuantDeskAI stub] getMarketSentiment', params.symbols.join(','));
+    return {
+      overallSentiment: 'neutral',
+      symbolSentiments: [] as Array<{ symbol: string; sentiment: string }>,
+      newsImpact: [] as string[],
+      socialSentiment: 'neutral',
+      technicalSentiment: 'neutral',
+      confidence: 0,
+    };
+  }
+
+  async getSentimentSignals(params: {
+    symbols: string[];
+    includeEntrySignals?: boolean;
+    includeExitSignals?: boolean;
+    includeRiskSignals?: boolean;
+  }) {
+    console.log('[QuantDeskAI stub] getSentimentSignals', params.symbols.join(','));
+    return {
+      entrySignals: [] as string[],
+      exitSignals: [] as string[],
+      riskSignals: [] as string[],
+      signalStrength: 0,
+      recommendedActions: [] as string[],
+    };
+  }
+
+  async analyzeNewsImpact(params: {
+    symbols: string[];
+    keywords?: string[];
+    timeframe?: string;
+    includeSentimentScoring?: boolean;
+  }) {
+    console.log('[QuantDeskAI stub] analyzeNewsImpact', params.symbols.join(','));
+    return {
+      newsSentiment: 'neutral',
+      keywordImpact: [] as Array<{ keyword: string; impact: number }>,
+      sentimentTrend: [] as number[],
+      newsVolume: 0,
+      impactScore: 0,
+    };
+  }
+
+  async getSocialSentiment(params: {
+    symbols: string[];
+    platforms: string[];
+    timeframe?: string;
+    includeInfluencerAnalysis?: boolean;
+  }) {
+    console.log('[QuantDeskAI stub] getSocialSentiment', params.platforms.join(','));
+    return {
+      platformSentiments: [] as Array<{ platform: string; sentiment: string }>,
+      influencerSentiment: 'neutral',
+      socialVolume: 0,
+      sentimentMomentum: 0,
+      trendingTopics: [] as string[],
+    };
+  }
+}
 
 export class AISentimentAnalyzer {
   private ai: QuantDeskAI;
