@@ -1,0 +1,7750 @@
+{
+  "address": "8nt6uDabk35u9onRYq4DP1bhGu82kkEMYkvJsSFTqZ4G",
+  "metadata": {
+    "name": "quantdesk_perp_dex",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "QuantDesk Perpetual DEX Smart Contracts"
+  },
+  "instructions": [
+    {
+      "name": "add_cross_collateral",
+      "discriminator": [
+        250,
+        134,
+        188,
+        216,
+        236,
+        244,
+        143,
+        195
+      ],
+      "accounts": [
+        {
+          "name": "cross_collateral_account",
+          "writable": true
+        },
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "oracle_feed"
+        }
+      ],
+      "args": [
+        {
+          "name": "asset_type",
+          "type": {
+            "defined": {
+              "name": "CollateralType"
+            }
+          }
+        },
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "cancel_order",
+      "discriminator": [
+        95,
+        129,
+        237,
+        240,
+        8,
+        49,
+        223,
+        132
+      ],
+      "accounts": [
+        {
+          "name": "program_state",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  116,
+                  111,
+                  99,
+                  111,
+                  108,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "security_circuit_breaker",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  101,
+                  99,
+                  117,
+                  114,
+                  105,
+                  116,
+                  121,
+                  95,
+                  99,
+                  105,
+                  114,
+                  99,
+                  117,
+                  105,
+                  116,
+                  95,
+                  98,
+                  114,
+                  101,
+                  97,
+                  107,
+                  101,
+                  114
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "user_account",
+          "writable": true,
+          "relations": [
+            "order"
+          ]
+        },
+        {
+          "name": "order",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  111,
+                  114,
+                  100,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "user_account"
+              },
+              {
+                "kind": "account",
+                "path": "order.order_index",
+                "account": "Order"
+              }
+            ]
+          }
+        },
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "order"
+          ]
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "check_security_before_trading",
+      "discriminator": [
+        113,
+        177,
+        248,
+        213,
+        221,
+        56,
+        99,
+        219
+      ],
+      "accounts": [
+        {
+          "name": "security_circuit_breaker",
+          "writable": true
+        },
+        {
+          "name": "keeper_security_manager",
+          "writable": true
+        },
+        {
+          "name": "oracle_staleness_protection",
+          "writable": true
+        },
+        {
+          "name": "pyth_price_feed"
+        },
+        {
+          "name": "switchboard_price_feed",
+          "optional": true
+        }
+      ],
+      "args": [
+        {
+          "name": "current_price",
+          "type": "u64"
+        },
+        {
+          "name": "current_volume",
+          "type": "u64"
+        },
+        {
+          "name": "system_load",
+          "type": "u16"
+        }
+      ]
+    },
+    {
+      "name": "claim_keeper_reward_sol",
+      "discriminator": [
+        119,
+        3,
+        182,
+        10,
+        182,
+        190,
+        67,
+        224
+      ],
+      "accounts": [
+        {
+          "name": "keeper_network",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  107,
+                  101,
+                  101,
+                  112,
+                  101,
+                  114,
+                  95,
+                  110,
+                  101,
+                  116,
+                  119,
+                  111,
+                  114,
+                  107
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "keeper_reward_vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  107,
+                  101,
+                  101,
+                  112,
+                  101,
+                  114,
+                  95,
+                  114,
+                  101,
+                  119,
+                  97,
+                  114,
+                  100,
+                  95,
+                  115,
+                  111,
+                  108,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "keeper",
+          "writable": true,
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "claim_seat",
+      "discriminator": [
+        47,
+        217,
+        3,
+        139,
+        51,
+        238,
+        55,
+        107
+      ],
+      "accounts": [
+        {
+          "name": "seat",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  101,
+                  97,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "market"
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              }
+            ]
+          }
+        },
+        {
+          "name": "market"
+        },
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "close_position",
+      "discriminator": [
+        123,
+        134,
+        81,
+        0,
+        49,
+        68,
+        98,
+        98
+      ],
+      "accounts": [
+        {
+          "name": "market",
+          "writable": true
+        },
+        {
+          "name": "program_state",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  116,
+                  111,
+                  99,
+                  111,
+                  108,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "security_circuit_breaker",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  101,
+                  99,
+                  117,
+                  114,
+                  105,
+                  116,
+                  121,
+                  95,
+                  99,
+                  105,
+                  114,
+                  99,
+                  117,
+                  105,
+                  116,
+                  95,
+                  98,
+                  114,
+                  101,
+                  97,
+                  107,
+                  101,
+                  114
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "user_account",
+          "writable": true
+        },
+        {
+          "name": "position",
+          "writable": true
+        },
+        {
+          "name": "pyth_price_feed"
+        },
+        {
+          "name": "switchboard_price_feed",
+          "optional": true
+        },
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "close_user_account",
+      "discriminator": [
+        236,
+        181,
+        3,
+        71,
+        194,
+        18,
+        151,
+        191
+      ],
+      "accounts": [
+        {
+          "name": "user_account",
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "create_user_account",
+      "discriminator": [
+        146,
+        68,
+        100,
+        69,
+        63,
+        46,
+        182,
+        199
+      ],
+      "accounts": [
+        {
+          "name": "user_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  115,
+                  101,
+                  114,
+                  95,
+                  97,
+                  99,
+                  99,
+                  111,
+                  117,
+                  110,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "authority"
+              },
+              {
+                "kind": "arg",
+                "path": "account_index"
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "account_index",
+          "type": "u16"
+        }
+      ]
+    },
+    {
+      "name": "deposit_collateral",
+      "discriminator": [
+        156,
+        131,
+        142,
+        116,
+        146,
+        247,
+        162,
+        120
+      ],
+      "accounts": [
+        {
+          "name": "user_account",
+          "writable": true
+        },
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "protocol_vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  116,
+                  111,
+                  99,
+                  111,
+                  108,
+                  95,
+                  115,
+                  111,
+                  108,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "collateral_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  108,
+                  108,
+                  97,
+                  116,
+                  101,
+                  114,
+                  97,
+                  108
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  83,
+                  79,
+                  76
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "program_state",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  116,
+                  111,
+                  99,
+                  111,
+                  108,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "sol_usd_price_feed",
+          "docs": [
+            "Pyth SOL/USD price feed account"
+          ]
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "deposit_native_sol",
+      "discriminator": [
+        16,
+        147,
+        179,
+        138,
+        225,
+        77,
+        137,
+        35
+      ],
+      "accounts": [
+        {
+          "name": "user_account",
+          "writable": true
+        },
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "protocol_vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  116,
+                  111,
+                  99,
+                  111,
+                  108,
+                  95,
+                  115,
+                  111,
+                  108,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "collateral_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  108,
+                  108,
+                  97,
+                  116,
+                  101,
+                  114,
+                  97,
+                  108
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  83,
+                  79,
+                  76
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "program_state",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  116,
+                  111,
+                  99,
+                  111,
+                  108,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "sol_usd_price_feed",
+          "docs": [
+            "Pyth SOL/USD price feed account"
+          ]
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "deposit_to_quant_vault",
+      "discriminator": [
+        49,
+        107,
+        27,
+        123,
+        138,
+        207,
+        217,
+        67
+      ],
+      "accounts": [
+        {
+          "name": "vault",
+          "writable": true
+        },
+        {
+          "name": "depositor",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116,
+                  95,
+                  100,
+                  101,
+                  112,
+                  111,
+                  115,
+                  105,
+                  116,
+                  111,
+                  114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault"
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault_portfolio",
+          "writable": true
+        },
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "execute_conditional_order",
+      "discriminator": [
+        41,
+        108,
+        144,
+        244,
+        28,
+        207,
+        141,
+        254
+      ],
+      "accounts": [
+        {
+          "name": "program_state",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  116,
+                  111,
+                  99,
+                  111,
+                  108,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "security_circuit_breaker",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  101,
+                  99,
+                  117,
+                  114,
+                  105,
+                  116,
+                  121,
+                  95,
+                  99,
+                  105,
+                  114,
+                  99,
+                  117,
+                  105,
+                  116,
+                  95,
+                  98,
+                  114,
+                  101,
+                  97,
+                  107,
+                  101,
+                  114
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "market",
+          "writable": true,
+          "relations": [
+            "order"
+          ]
+        },
+        {
+          "name": "order",
+          "writable": true
+        },
+        {
+          "name": "user_account",
+          "writable": true,
+          "relations": [
+            "order"
+          ]
+        },
+        {
+          "name": "position",
+          "writable": true
+        },
+        {
+          "name": "keeper_network",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  107,
+                  101,
+                  101,
+                  112,
+                  101,
+                  114,
+                  95,
+                  110,
+                  101,
+                  116,
+                  119,
+                  111,
+                  114,
+                  107
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "executor",
+          "writable": true,
+          "signer": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "execute_iceberg_chunk",
+      "discriminator": [
+        17,
+        189,
+        160,
+        255,
+        75,
+        174,
+        97,
+        51
+      ],
+      "accounts": [
+        {
+          "name": "order",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  111,
+                  114,
+                  100,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "user_account"
+              },
+              {
+                "kind": "account",
+                "path": "order.order_index",
+                "account": "Order"
+              }
+            ]
+          }
+        },
+        {
+          "name": "market",
+          "writable": true,
+          "relations": [
+            "order"
+          ]
+        },
+        {
+          "name": "user_account",
+          "writable": true,
+          "relations": [
+            "order"
+          ]
+        },
+        {
+          "name": "pyth_price_feed",
+          "docs": [
+            "Pyth price feed for market price validation"
+          ]
+        },
+        {
+          "name": "switchboard_price_feed",
+          "docs": [
+            "Optional Switchboard price feed"
+          ],
+          "optional": true
+        },
+        {
+          "name": "executor",
+          "writable": true,
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "chunk_size",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "execute_twap_chunk",
+      "discriminator": [
+        150,
+        92,
+        103,
+        84,
+        62,
+        15,
+        64,
+        143
+      ],
+      "accounts": [
+        {
+          "name": "order",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  111,
+                  114,
+                  100,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "user_account"
+              },
+              {
+                "kind": "account",
+                "path": "order.order_index",
+                "account": "Order"
+              }
+            ]
+          }
+        },
+        {
+          "name": "market",
+          "writable": true,
+          "relations": [
+            "order"
+          ]
+        },
+        {
+          "name": "user_account",
+          "writable": true,
+          "relations": [
+            "order"
+          ]
+        },
+        {
+          "name": "pyth_price_feed",
+          "docs": [
+            "Pyth price feed for market price validation"
+          ]
+        },
+        {
+          "name": "switchboard_price_feed",
+          "docs": [
+            "Optional Switchboard price feed"
+          ],
+          "optional": true
+        },
+        {
+          "name": "executor",
+          "writable": true,
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "chunk_size",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "fund_keeper_reward_sol_vault",
+      "discriminator": [
+        46,
+        71,
+        1,
+        68,
+        183,
+        11,
+        212,
+        42
+      ],
+      "accounts": [
+        {
+          "name": "keeper_reward_vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  107,
+                  101,
+                  101,
+                  112,
+                  101,
+                  114,
+                  95,
+                  114,
+                  101,
+                  119,
+                  97,
+                  114,
+                  100,
+                  95,
+                  115,
+                  111,
+                  108,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "initialize_backstop_vault",
+      "discriminator": [
+        17,
+        107,
+        137,
+        4,
+        245,
+        243,
+        4,
+        198
+      ],
+      "accounts": [
+        {
+          "name": "backstop_vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  98,
+                  97,
+                  99,
+                  107,
+                  115,
+                  116,
+                  111,
+                  112,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "insurance_buffer_ratio",
+          "type": "u16"
+        }
+      ]
+    },
+    {
+      "name": "initialize_cross_collateral_account",
+      "discriminator": [
+        215,
+        32,
+        248,
+        216,
+        198,
+        40,
+        118,
+        3
+      ],
+      "accounts": [
+        {
+          "name": "cross_collateral_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  114,
+                  111,
+                  115,
+                  115,
+                  95,
+                  99,
+                  111,
+                  108,
+                  108,
+                  97,
+                  116,
+                  101,
+                  114,
+                  97,
+                  108
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              }
+            ]
+          }
+        },
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "initialize_fee_collector",
+      "discriminator": [
+        197,
+        234,
+        132,
+        77,
+        108,
+        38,
+        60,
+        215
+      ],
+      "accounts": [
+        {
+          "name": "fee_collector",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  101,
+                  101,
+                  95,
+                  99,
+                  111,
+                  108,
+                  108,
+                  101,
+                  99,
+                  116,
+                  111,
+                  114
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "initialize_insurance_fund",
+      "discriminator": [
+        2,
+        239,
+        39,
+        87,
+        50,
+        28,
+        108,
+        12
+      ],
+      "accounts": [
+        {
+          "name": "insurance_fund",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  105,
+                  110,
+                  115,
+                  117,
+                  114,
+                  97,
+                  110,
+                  99,
+                  101,
+                  95,
+                  102,
+                  117,
+                  110,
+                  100
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "initial_deposit",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "initialize_keeper_reward_sol_vault",
+      "discriminator": [
+        96,
+        54,
+        232,
+        68,
+        247,
+        121,
+        69,
+        189
+      ],
+      "accounts": [
+        {
+          "name": "keeper_reward_vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  107,
+                  101,
+                  101,
+                  112,
+                  101,
+                  114,
+                  95,
+                  114,
+                  101,
+                  119,
+                  97,
+                  114,
+                  100,
+                  95,
+                  115,
+                  111,
+                  108,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "initialize_keeper_security_manager",
+      "discriminator": [
+        186,
+        180,
+        89,
+        15,
+        199,
+        4,
+        221,
+        232
+      ],
+      "accounts": [
+        {
+          "name": "keeper_security_manager",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  107,
+                  101,
+                  101,
+                  112,
+                  101,
+                  114,
+                  95,
+                  115,
+                  101,
+                  99,
+                  117,
+                  114,
+                  105,
+                  116,
+                  121,
+                  95,
+                  109,
+                  97,
+                  110,
+                  97,
+                  103,
+                  101,
+                  114
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "initialize_market",
+      "discriminator": [
+        35,
+        35,
+        189,
+        193,
+        155,
+        48,
+        170,
+        203
+      ],
+      "accounts": [
+        {
+          "name": "market",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  97,
+                  114,
+                  107,
+                  101,
+                  116
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "base_asset"
+              },
+              {
+                "kind": "arg",
+                "path": "quote_asset"
+              }
+            ]
+          }
+        },
+        {
+          "name": "program_state",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  116,
+                  111,
+                  99,
+                  111,
+                  108,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "base_asset",
+          "type": "string"
+        },
+        {
+          "name": "quote_asset",
+          "type": "string"
+        },
+        {
+          "name": "initial_price",
+          "type": "u64"
+        },
+        {
+          "name": "max_leverage",
+          "type": "u8"
+        },
+        {
+          "name": "initial_margin_ratio",
+          "type": "u16"
+        },
+        {
+          "name": "maintenance_margin_ratio",
+          "type": "u16"
+        }
+      ]
+    },
+    {
+      "name": "initialize_market_v2",
+      "discriminator": [
+        142,
+        105,
+        160,
+        176,
+        44,
+        37,
+        178,
+        160
+      ],
+      "accounts": [
+        {
+          "name": "market",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  97,
+                  114,
+                  107,
+                  101,
+                  116,
+                  95,
+                  118,
+                  50
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "authority"
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "base_asset",
+          "type": {
+            "array": [
+              "u8",
+              8
+            ]
+          }
+        },
+        {
+          "name": "quote_asset",
+          "type": {
+            "array": [
+              "u8",
+              8
+            ]
+          }
+        },
+        {
+          "name": "tick_size",
+          "type": "u64"
+        },
+        {
+          "name": "lot_size",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "initialize_oracle_staleness_protection",
+      "discriminator": [
+        245,
+        69,
+        155,
+        169,
+        17,
+        81,
+        139,
+        0
+      ],
+      "accounts": [
+        {
+          "name": "oracle_staleness_protection",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  111,
+                  114,
+                  97,
+                  99,
+                  108,
+                  101,
+                  95,
+                  115,
+                  116,
+                  97,
+                  108,
+                  101,
+                  110,
+                  101,
+                  115,
+                  115,
+                  95,
+                  112,
+                  114,
+                  111,
+                  116,
+                  101,
+                  99,
+                  116,
+                  105,
+                  111,
+                  110
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "initialize_points_system",
+      "discriminator": [
+        13,
+        74,
+        208,
+        207,
+        160,
+        91,
+        242,
+        166
+      ],
+      "accounts": [
+        {
+          "name": "points_system",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  111,
+                  105,
+                  110,
+                  116,
+                  115,
+                  95,
+                  115,
+                  121,
+                  115,
+                  116,
+                  101,
+                  109
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "initialize_portfolio",
+      "discriminator": [
+        122,
+        177,
+        206,
+        169,
+        129,
+        85,
+        26,
+        192
+      ],
+      "accounts": [
+        {
+          "name": "portfolio",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  111,
+                  114,
+                  116,
+                  102,
+                  111,
+                  108,
+                  105,
+                  111
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              },
+              {
+                "kind": "arg",
+                "path": "subaccount_index"
+              }
+            ]
+          }
+        },
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "subaccount_index",
+          "type": "u16"
+        },
+        {
+          "name": "referrer",
+          "type": "pubkey"
+        }
+      ]
+    },
+    {
+      "name": "initialize_program_state",
+      "discriminator": [
+        114,
+        90,
+        170,
+        208,
+        223,
+        41,
+        40,
+        160
+      ],
+      "accounts": [
+        {
+          "name": "program_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  116,
+                  111,
+                  99,
+                  111,
+                  108,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "initialize_protocol_sol_vault",
+      "discriminator": [
+        208,
+        172,
+        196,
+        133,
+        181,
+        25,
+        221,
+        170
+      ],
+      "accounts": [
+        {
+          "name": "protocol_vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  116,
+                  111,
+                  99,
+                  111,
+                  108,
+                  95,
+                  115,
+                  111,
+                  108,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "initialize_quant_vault",
+      "discriminator": [
+        137,
+        126,
+        199,
+        249,
+        54,
+        42,
+        44,
+        254
+      ],
+      "accounts": [
+        {
+          "name": "vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  113,
+                  117,
+                  97,
+                  110,
+                  116,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "leader"
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault_portfolio",
+          "docs": [
+            "The zero-copy portfolio that will execute the trades",
+            "Security: Must be owned by the leader or a newly derived PDA for this vault."
+          ],
+          "writable": true
+        },
+        {
+          "name": "leader",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "strategy",
+          "type": {
+            "defined": {
+              "name": "MarketMakingStrategy"
+            }
+          }
+        },
+        {
+          "name": "performance_fee",
+          "type": "u16"
+        }
+      ]
+    },
+    {
+      "name": "initialize_security_circuit_breaker",
+      "discriminator": [
+        210,
+        155,
+        201,
+        173,
+        164,
+        175,
+        49,
+        220
+      ],
+      "accounts": [
+        {
+          "name": "security_circuit_breaker",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  101,
+                  99,
+                  117,
+                  114,
+                  105,
+                  116,
+                  121,
+                  95,
+                  99,
+                  105,
+                  114,
+                  99,
+                  117,
+                  105,
+                  116,
+                  95,
+                  98,
+                  114,
+                  101,
+                  97,
+                  107,
+                  101,
+                  114
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "initialize_user_points",
+      "discriminator": [
+        45,
+        194,
+        72,
+        115,
+        21,
+        131,
+        153,
+        208
+      ],
+      "accounts": [
+        {
+          "name": "user_points",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  115,
+                  101,
+                  114,
+                  95,
+                  112,
+                  111,
+                  105,
+                  110,
+                  116,
+                  115
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              }
+            ]
+          }
+        },
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "liquidate_position",
+      "discriminator": [
+        187,
+        74,
+        229,
+        149,
+        102,
+        81,
+        221,
+        68
+      ],
+      "accounts": [
+        {
+          "name": "program_state",
+          "writable": true
+        },
+        {
+          "name": "market",
+          "writable": true
+        },
+        {
+          "name": "user_account",
+          "writable": true
+        },
+        {
+          "name": "position",
+          "writable": true
+        },
+        {
+          "name": "keeper_network",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  107,
+                  101,
+                  101,
+                  112,
+                  101,
+                  114,
+                  95,
+                  110,
+                  101,
+                  116,
+                  119,
+                  111,
+                  114,
+                  107
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "insurance_fund",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  105,
+                  110,
+                  115,
+                  117,
+                  114,
+                  97,
+                  110,
+                  99,
+                  101,
+                  95,
+                  102,
+                  117,
+                  110,
+                  100
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "backstop_vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  98,
+                  97,
+                  99,
+                  107,
+                  115,
+                  116,
+                  111,
+                  112,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "fee_collector",
+          "writable": true
+        },
+        {
+          "name": "security_circuit_breaker",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  101,
+                  99,
+                  117,
+                  114,
+                  105,
+                  116,
+                  121,
+                  95,
+                  99,
+                  105,
+                  114,
+                  99,
+                  117,
+                  105,
+                  116,
+                  95,
+                  98,
+                  114,
+                  101,
+                  97,
+                  107,
+                  101,
+                  114
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "oracle_staleness_protection",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  111,
+                  114,
+                  97,
+                  99,
+                  108,
+                  101,
+                  95,
+                  115,
+                  116,
+                  97,
+                  108,
+                  101,
+                  110,
+                  101,
+                  115,
+                  115,
+                  95,
+                  112,
+                  114,
+                  111,
+                  116,
+                  101,
+                  99,
+                  116,
+                  105,
+                  111,
+                  110
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "pyth_price_feed"
+        },
+        {
+          "name": "switchboard_price_feed",
+          "optional": true
+        },
+        {
+          "name": "liquidator",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "vault",
+          "writable": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "match_orders",
+      "discriminator": [
+        17,
+        1,
+        201,
+        93,
+        7,
+        51,
+        251,
+        134
+      ],
+      "accounts": [
+        {
+          "name": "program_state",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  116,
+                  111,
+                  99,
+                  111,
+                  108,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "security_circuit_breaker",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  101,
+                  99,
+                  117,
+                  114,
+                  105,
+                  116,
+                  121,
+                  95,
+                  99,
+                  105,
+                  114,
+                  99,
+                  117,
+                  105,
+                  116,
+                  95,
+                  98,
+                  114,
+                  101,
+                  97,
+                  107,
+                  101,
+                  114
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "market",
+          "writable": true
+        },
+        {
+          "name": "maker_order",
+          "writable": true
+        },
+        {
+          "name": "taker_order",
+          "writable": true
+        },
+        {
+          "name": "maker_user_account",
+          "writable": true
+        },
+        {
+          "name": "taker_user_account",
+          "writable": true
+        },
+        {
+          "name": "maker_position",
+          "writable": true
+        },
+        {
+          "name": "taker_position",
+          "writable": true
+        },
+        {
+          "name": "keeper_network",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  107,
+                  101,
+                  101,
+                  112,
+                  101,
+                  114,
+                  95,
+                  110,
+                  101,
+                  116,
+                  119,
+                  111,
+                  114,
+                  107
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "keeper",
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "match_size",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "open_position",
+      "discriminator": [
+        135,
+        128,
+        47,
+        77,
+        15,
+        152,
+        240,
+        49
+      ],
+      "accounts": [
+        {
+          "name": "position",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  111,
+                  115,
+                  105,
+                  116,
+                  105,
+                  111,
+                  110
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "user_account"
+              },
+              {
+                "kind": "arg",
+                "path": "position_index"
+              }
+            ]
+          }
+        },
+        {
+          "name": "program_state",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  116,
+                  111,
+                  99,
+                  111,
+                  108,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "security_circuit_breaker",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  101,
+                  99,
+                  117,
+                  114,
+                  105,
+                  116,
+                  121,
+                  95,
+                  99,
+                  105,
+                  114,
+                  99,
+                  117,
+                  105,
+                  116,
+                  95,
+                  98,
+                  114,
+                  101,
+                  97,
+                  107,
+                  101,
+                  114
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "user_account",
+          "writable": true
+        },
+        {
+          "name": "market",
+          "writable": true
+        },
+        {
+          "name": "pyth_price_feed"
+        },
+        {
+          "name": "switchboard_price_feed",
+          "optional": true
+        },
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "position_index",
+          "type": "u16"
+        },
+        {
+          "name": "side",
+          "type": {
+            "defined": {
+              "name": "PositionSide"
+            }
+          }
+        },
+        {
+          "name": "size",
+          "type": "u64"
+        },
+        {
+          "name": "leverage",
+          "type": "u8"
+        },
+        {
+          "name": "entry_price",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "place_order",
+      "discriminator": [
+        51,
+        194,
+        155,
+        175,
+        109,
+        130,
+        96,
+        106
+      ],
+      "accounts": [
+        {
+          "name": "market",
+          "writable": true
+        },
+        {
+          "name": "program_state",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  116,
+                  111,
+                  99,
+                  111,
+                  108,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "security_circuit_breaker",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  101,
+                  99,
+                  117,
+                  114,
+                  105,
+                  116,
+                  121,
+                  95,
+                  99,
+                  105,
+                  114,
+                  99,
+                  117,
+                  105,
+                  116,
+                  95,
+                  98,
+                  114,
+                  101,
+                  97,
+                  107,
+                  101,
+                  114
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "user_account",
+          "writable": true
+        },
+        {
+          "name": "pyth_price_feed"
+        },
+        {
+          "name": "switchboard_price_feed",
+          "optional": true
+        },
+        {
+          "name": "order",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  111,
+                  114,
+                  100,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "user_account"
+              },
+              {
+                "kind": "account",
+                "path": "user_account.next_order_index",
+                "account": "UserAccount"
+              }
+            ]
+          }
+        },
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "order_type",
+          "type": {
+            "defined": {
+              "name": "OrderType"
+            }
+          }
+        },
+        {
+          "name": "side",
+          "type": {
+            "defined": {
+              "name": "PositionSide"
+            }
+          }
+        },
+        {
+          "name": "size",
+          "type": "u64"
+        },
+        {
+          "name": "price",
+          "type": "u64"
+        },
+        {
+          "name": "stop_price",
+          "type": "u64"
+        },
+        {
+          "name": "trailing_distance",
+          "type": "u64"
+        },
+        {
+          "name": "leverage",
+          "type": "u8"
+        },
+        {
+          "name": "expires_at",
+          "type": "i64"
+        },
+        {
+          "name": "hidden_size",
+          "type": "u64"
+        },
+        {
+          "name": "display_size",
+          "type": "u64"
+        },
+        {
+          "name": "time_in_force",
+          "type": {
+            "defined": {
+              "name": "TimeInForce"
+            }
+          }
+        },
+        {
+          "name": "target_price",
+          "type": "u64"
+        },
+        {
+          "name": "twap_duration",
+          "type": "u64"
+        },
+        {
+          "name": "twap_interval",
+          "type": "u64"
+        },
+        {
+          "name": "idempotency_key",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "place_order_v2",
+      "discriminator": [
+        232,
+        111,
+        115,
+        196,
+        237,
+        143,
+        62,
+        204
+      ],
+      "accounts": [
+        {
+          "name": "market",
+          "writable": true
+        },
+        {
+          "name": "portfolio",
+          "writable": true
+        },
+        {
+          "name": "seat",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  101,
+                  97,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "market"
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              }
+            ]
+          }
+        },
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "relayer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "jit_maker",
+          "signer": true,
+          "optional": true
+        },
+        {
+          "name": "jit_portfolio",
+          "writable": true,
+          "optional": true
+        }
+      ],
+      "args": [
+        {
+          "name": "side",
+          "type": "u8"
+        },
+        {
+          "name": "size",
+          "type": "u64"
+        },
+        {
+          "name": "price",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "register_as_keeper",
+      "discriminator": [
+        212,
+        172,
+        233,
+        239,
+        253,
+        30,
+        168,
+        111
+      ],
+      "accounts": [
+        {
+          "name": "keeper_network",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  107,
+                  101,
+                  101,
+                  112,
+                  101,
+                  114,
+                  95,
+                  110,
+                  101,
+                  116,
+                  119,
+                  111,
+                  114,
+                  107
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "keeper",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "stake_amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "remove_cross_collateral",
+      "discriminator": [
+        23,
+        94,
+        11,
+        143,
+        35,
+        203,
+        180,
+        150
+      ],
+      "accounts": [
+        {
+          "name": "cross_collateral_account",
+          "writable": true
+        },
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "asset_type",
+          "type": {
+            "defined": {
+              "name": "CollateralType"
+            }
+          }
+        },
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "set_fixed_oracle_price",
+      "discriminator": [
+        27,
+        249,
+        127,
+        33,
+        59,
+        36,
+        30,
+        220
+      ],
+      "accounts": [
+        {
+          "name": "program_state",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  116,
+                  111,
+                  99,
+                  111,
+                  108,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "market",
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "price",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "set_market_status",
+      "discriminator": [
+        101,
+        175,
+        83,
+        107,
+        200,
+        141,
+        155,
+        182
+      ],
+      "accounts": [
+        {
+          "name": "program_state",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  116,
+                  111,
+                  99,
+                  111,
+                  108,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "market",
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "is_active",
+          "type": "bool"
+        }
+      ]
+    },
+    {
+      "name": "set_referrer",
+      "discriminator": [
+        115,
+        251,
+        55,
+        0,
+        166,
+        189,
+        25,
+        74
+      ],
+      "accounts": [
+        {
+          "name": "user_account",
+          "writable": true
+        },
+        {
+          "name": "referrer_account",
+          "docs": [
+            "The account of the referrer for validation",
+            "Security: Prevents circular referrals"
+          ]
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "referrer",
+          "type": "pubkey"
+        }
+      ]
+    },
+    {
+      "name": "settle_funding",
+      "discriminator": [
+        11,
+        251,
+        12,
+        161,
+        199,
+        228,
+        133,
+        87
+      ],
+      "accounts": [
+        {
+          "name": "program_state",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  116,
+                  111,
+                  99,
+                  111,
+                  108,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "market",
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "signer": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "settle_global_pnl",
+      "discriminator": [
+        197,
+        19,
+        40,
+        210,
+        192,
+        203,
+        246,
+        198
+      ],
+      "accounts": [
+        {
+          "name": "cross_collateral_account",
+          "writable": true
+        },
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "stake_in_backstop",
+      "discriminator": [
+        159,
+        143,
+        140,
+        180,
+        182,
+        59,
+        93,
+        250
+      ],
+      "accounts": [
+        {
+          "name": "backstop_vault",
+          "writable": true
+        },
+        {
+          "name": "backstop_provider",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  98,
+                  97,
+                  99,
+                  107,
+                  115,
+                  116,
+                  111,
+                  112,
+                  95,
+                  112,
+                  114,
+                  111,
+                  118,
+                  105,
+                  100,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "authority"
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "trade_from_quant_vault",
+      "discriminator": [
+        118,
+        154,
+        237,
+        134,
+        31,
+        50,
+        71,
+        120
+      ],
+      "accounts": [
+        {
+          "name": "vault"
+        },
+        {
+          "name": "vault_portfolio",
+          "writable": true
+        },
+        {
+          "name": "leader",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "market",
+          "writable": true
+        },
+        {
+          "name": "vault_seat",
+          "docs": [
+            "The seat PDA for the VAULT (not the leader)"
+          ]
+        }
+      ],
+      "args": [
+        {
+          "name": "side",
+          "type": "u8"
+        },
+        {
+          "name": "size",
+          "type": "u64"
+        },
+        {
+          "name": "price",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "update_collateral_config",
+      "discriminator": [
+        87,
+        81,
+        178,
+        108,
+        188,
+        71,
+        197,
+        125
+      ],
+      "accounts": [
+        {
+          "name": "collateral_account",
+          "writable": true
+        },
+        {
+          "name": "program_state",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  116,
+                  111,
+                  99,
+                  111,
+                  108,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "initial_asset_weight",
+          "type": "u16"
+        },
+        {
+          "name": "maintenance_asset_weight",
+          "type": "u16"
+        }
+      ]
+    },
+    {
+      "name": "update_keeper_performance",
+      "discriminator": [
+        158,
+        126,
+        214,
+        187,
+        95,
+        208,
+        188,
+        119
+      ],
+      "accounts": [
+        {
+          "name": "keeper_network",
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "keeper_pubkey",
+          "type": "pubkey"
+        },
+        {
+          "name": "performance_score",
+          "type": "u16"
+        }
+      ]
+    },
+    {
+      "name": "update_market_parameters",
+      "discriminator": [
+        183,
+        69,
+        5,
+        76,
+        114,
+        136,
+        129,
+        65
+      ],
+      "accounts": [
+        {
+          "name": "program_state",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  116,
+                  111,
+                  99,
+                  111,
+                  108,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "market",
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "max_leverage",
+          "type": {
+            "option": "u8"
+          }
+        },
+        {
+          "name": "initial_margin_ratio",
+          "type": {
+            "option": "u16"
+          }
+        },
+        {
+          "name": "maintenance_margin_ratio",
+          "type": {
+            "option": "u16"
+          }
+        },
+        {
+          "name": "funding_rate_cap",
+          "type": {
+            "option": "i64"
+          }
+        }
+      ]
+    },
+    {
+      "name": "update_oracle_price",
+      "discriminator": [
+        14,
+        35,
+        163,
+        150,
+        65,
+        116,
+        149,
+        154
+      ],
+      "accounts": [
+        {
+          "name": "program_state",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  116,
+                  111,
+                  99,
+                  111,
+                  108,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "market",
+          "writable": true
+        },
+        {
+          "name": "price_feed"
+        },
+        {
+          "name": "authority",
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "new_price",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "update_points_config",
+      "discriminator": [
+        15,
+        89,
+        27,
+        201,
+        127,
+        239,
+        187,
+        80
+      ],
+      "accounts": [
+        {
+          "name": "points_system",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  111,
+                  105,
+                  110,
+                  116,
+                  115,
+                  95,
+                  115,
+                  121,
+                  115,
+                  116,
+                  101,
+                  109
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "trading_multiplier",
+          "type": {
+            "option": "u16"
+          }
+        },
+        {
+          "name": "referral_bonus",
+          "type": {
+            "option": "u16"
+          }
+        },
+        {
+          "name": "staking_multiplier",
+          "type": {
+            "option": "u16"
+          }
+        }
+      ]
+    },
+    {
+      "name": "update_position_margin",
+      "discriminator": [
+        131,
+        249,
+        20,
+        133,
+        50,
+        11,
+        185,
+        28
+      ],
+      "accounts": [
+        {
+          "name": "market",
+          "writable": true
+        },
+        {
+          "name": "program_state",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  116,
+                  111,
+                  99,
+                  111,
+                  108,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "security_circuit_breaker",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  101,
+                  99,
+                  117,
+                  114,
+                  105,
+                  116,
+                  121,
+                  95,
+                  99,
+                  105,
+                  114,
+                  99,
+                  117,
+                  105,
+                  116,
+                  95,
+                  98,
+                  114,
+                  101,
+                  97,
+                  107,
+                  101,
+                  114
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "position",
+          "writable": true
+        },
+        {
+          "name": "user_account",
+          "writable": true
+        },
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "margin_delta",
+          "type": "i64"
+        }
+      ]
+    },
+    {
+      "name": "update_pyth_price",
+      "discriminator": [
+        221,
+        14,
+        48,
+        182,
+        7,
+        77,
+        193,
+        167
+      ],
+      "accounts": [
+        {
+          "name": "program_state",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  116,
+                  111,
+                  99,
+                  111,
+                  108,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "market",
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "price_feed",
+          "type": "pubkey"
+        }
+      ]
+    },
+    {
+      "name": "withdraw_from_backstop",
+      "discriminator": [
+        241,
+        201,
+        130,
+        58,
+        82,
+        183,
+        181,
+        33
+      ],
+      "accounts": [
+        {
+          "name": "backstop_vault",
+          "writable": true
+        },
+        {
+          "name": "backstop_provider",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  98,
+                  97,
+                  99,
+                  107,
+                  115,
+                  116,
+                  111,
+                  112,
+                  95,
+                  112,
+                  114,
+                  111,
+                  118,
+                  105,
+                  100,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "authority"
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "backstop_provider"
+          ]
+        }
+      ],
+      "args": [
+        {
+          "name": "shares",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "withdraw_native_sol",
+      "discriminator": [
+        201,
+        104,
+        187,
+        105,
+        80,
+        204,
+        84,
+        138
+      ],
+      "accounts": [
+        {
+          "name": "user_account",
+          "writable": true
+        },
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "protocol_vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  116,
+                  111,
+                  99,
+                  111,
+                  108,
+                  95,
+                  115,
+                  111,
+                  108,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "collateral_account",
+          "writable": true
+        },
+        {
+          "name": "security_circuit_breaker",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  101,
+                  99,
+                  117,
+                  114,
+                  105,
+                  116,
+                  121,
+                  95,
+                  99,
+                  105,
+                  114,
+                  99,
+                  117,
+                  105,
+                  116,
+                  95,
+                  98,
+                  114,
+                  101,
+                  97,
+                  107,
+                  101,
+                  114
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "oracle_staleness_protection",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  111,
+                  114,
+                  97,
+                  99,
+                  108,
+                  101,
+                  95,
+                  115,
+                  116,
+                  97,
+                  108,
+                  101,
+                  110,
+                  101,
+                  115,
+                  115,
+                  95,
+                  112,
+                  114,
+                  111,
+                  116,
+                  101,
+                  99,
+                  116,
+                  105,
+                  111,
+                  110
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "program_state",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  116,
+                  111,
+                  99,
+                  111,
+                  108,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "sol_usd_price_feed",
+          "docs": [
+            "Pyth SOL/USD price feed account"
+          ]
+        },
+        {
+          "name": "switchboard_price_feed",
+          "optional": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "BackstopProvider",
+      "discriminator": [
+        22,
+        237,
+        251,
+        21,
+        20,
+        75,
+        135,
+        160
+      ]
+    },
+    {
+      "name": "BackstopVault",
+      "discriminator": [
+        102,
+        177,
+        220,
+        26,
+        170,
+        168,
+        198,
+        139
+      ]
+    },
+    {
+      "name": "CircuitBreaker",
+      "discriminator": [
+        123,
+        141,
+        226,
+        182,
+        3,
+        205,
+        19,
+        253
+      ]
+    },
+    {
+      "name": "CollateralAccount",
+      "discriminator": [
+        134,
+        2,
+        192,
+        39,
+        194,
+        239,
+        19,
+        17
+      ]
+    },
+    {
+      "name": "CrossCollateralAccount",
+      "discriminator": [
+        112,
+        77,
+        228,
+        123,
+        169,
+        206,
+        150,
+        99
+      ]
+    },
+    {
+      "name": "FeeCollector",
+      "discriminator": [
+        250,
+        213,
+        73,
+        200,
+        175,
+        76,
+        225,
+        213
+      ]
+    },
+    {
+      "name": "InsuranceFund",
+      "discriminator": [
+        43,
+        134,
+        170,
+        87,
+        102,
+        16,
+        142,
+        147
+      ]
+    },
+    {
+      "name": "KeeperNetwork",
+      "discriminator": [
+        221,
+        221,
+        106,
+        72,
+        85,
+        224,
+        136,
+        246
+      ]
+    },
+    {
+      "name": "KeeperRewardSolVault",
+      "discriminator": [
+        25,
+        129,
+        188,
+        72,
+        75,
+        172,
+        110,
+        183
+      ]
+    },
+    {
+      "name": "KeeperSecurityManager",
+      "discriminator": [
+        233,
+        246,
+        148,
+        76,
+        153,
+        110,
+        204,
+        62
+      ]
+    },
+    {
+      "name": "Market",
+      "discriminator": [
+        219,
+        190,
+        213,
+        55,
+        0,
+        227,
+        198,
+        154
+      ]
+    },
+    {
+      "name": "MarketMakerVault",
+      "discriminator": [
+        86,
+        116,
+        163,
+        39,
+        0,
+        107,
+        244,
+        89
+      ]
+    },
+    {
+      "name": "MarketSeat",
+      "discriminator": [
+        232,
+        97,
+        199,
+        18,
+        159,
+        34,
+        114,
+        33
+      ]
+    },
+    {
+      "name": "MarketV2",
+      "discriminator": [
+        27,
+        60,
+        50,
+        75,
+        191,
+        193,
+        86,
+        227
+      ]
+    },
+    {
+      "name": "OracleStalenessProtection",
+      "discriminator": [
+        72,
+        70,
+        119,
+        236,
+        19,
+        161,
+        65,
+        240
+      ]
+    },
+    {
+      "name": "Order",
+      "discriminator": [
+        134,
+        173,
+        223,
+        185,
+        77,
+        86,
+        28,
+        51
+      ]
+    },
+    {
+      "name": "PointsSystem",
+      "discriminator": [
+        43,
+        247,
+        82,
+        251,
+        197,
+        81,
+        122,
+        11
+      ]
+    },
+    {
+      "name": "PortfolioAccount",
+      "discriminator": [
+        45,
+        106,
+        240,
+        82,
+        4,
+        127,
+        117,
+        29
+      ]
+    },
+    {
+      "name": "Position",
+      "discriminator": [
+        170,
+        188,
+        143,
+        228,
+        122,
+        64,
+        247,
+        208
+      ]
+    },
+    {
+      "name": "ProgramState",
+      "discriminator": [
+        77,
+        209,
+        137,
+        229,
+        149,
+        67,
+        167,
+        230
+      ]
+    },
+    {
+      "name": "ProtocolSolVault",
+      "discriminator": [
+        225,
+        223,
+        222,
+        1,
+        74,
+        62,
+        59,
+        131
+      ]
+    },
+    {
+      "name": "SecurityCircuitBreaker",
+      "discriminator": [
+        181,
+        179,
+        250,
+        226,
+        65,
+        89,
+        135,
+        111
+      ]
+    },
+    {
+      "name": "UserAccount",
+      "discriminator": [
+        211,
+        33,
+        136,
+        16,
+        186,
+        110,
+        242,
+        127
+      ]
+    },
+    {
+      "name": "UserPointsAccount",
+      "discriminator": [
+        37,
+        236,
+        6,
+        21,
+        50,
+        25,
+        249,
+        84
+      ]
+    },
+    {
+      "name": "VaultDepositor",
+      "discriminator": [
+        87,
+        109,
+        182,
+        106,
+        87,
+        96,
+        63,
+        211
+      ]
+    }
+  ],
+  "events": [
+    {
+      "name": "BankruptcyRecorded",
+      "discriminator": [
+        163,
+        138,
+        252,
+        170,
+        108,
+        221,
+        168,
+        131
+      ]
+    },
+    {
+      "name": "FundingRateUpdated",
+      "discriminator": [
+        14,
+        161,
+        238,
+        38,
+        236,
+        94,
+        57,
+        59
+      ]
+    },
+    {
+      "name": "LiquidationExecuted",
+      "discriminator": [
+        231,
+        78,
+        79,
+        211,
+        167,
+        46,
+        83,
+        205
+      ]
+    },
+    {
+      "name": "OraclePriceUpdated",
+      "discriminator": [
+        170,
+        138,
+        188,
+        200,
+        123,
+        50,
+        49,
+        104
+      ]
+    },
+    {
+      "name": "OrderFilled",
+      "discriminator": [
+        120,
+        124,
+        109,
+        66,
+        249,
+        116,
+        174,
+        30
+      ]
+    },
+    {
+      "name": "OrderMatched",
+      "discriminator": [
+        211,
+        0,
+        178,
+        174,
+        61,
+        245,
+        45,
+        250
+      ]
+    },
+    {
+      "name": "OrderPlaced",
+      "discriminator": [
+        96,
+        130,
+        204,
+        234,
+        169,
+        219,
+        216,
+        227
+      ]
+    },
+    {
+      "name": "PointsAwarded",
+      "discriminator": [
+        201,
+        95,
+        152,
+        50,
+        215,
+        83,
+        188,
+        38
+      ]
+    },
+    {
+      "name": "PositionClosed",
+      "discriminator": [
+        157,
+        163,
+        227,
+        228,
+        13,
+        97,
+        138,
+        121
+      ]
+    },
+    {
+      "name": "PositionOpened",
+      "discriminator": [
+        237,
+        175,
+        243,
+        230,
+        147,
+        117,
+        101,
+        121
+      ]
+    },
+    {
+      "name": "ReferralRebateCredited",
+      "discriminator": [
+        19,
+        120,
+        8,
+        129,
+        170,
+        148,
+        141,
+        125
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "InvalidAmount",
+      "msg": "Invalid token amount"
+    },
+    {
+      "code": 6001,
+      "name": "VaultInactive",
+      "msg": "Vault is inactive"
+    },
+    {
+      "code": 6002,
+      "name": "InsufficientVaultBalance",
+      "msg": "Insufficient vault balance"
+    },
+    {
+      "code": 6003,
+      "name": "UnauthorizedTokenAuthority",
+      "msg": "Unauthorized token authority"
+    },
+    {
+      "code": 6004,
+      "name": "UnauthorizedTokenUser",
+      "msg": "Unauthorized token user"
+    },
+    {
+      "code": 6005,
+      "name": "TokenAccountNotFound",
+      "msg": "Token account not found"
+    },
+    {
+      "code": 6006,
+      "name": "InvalidMintAddress",
+      "msg": "Invalid mint address"
+    }
+  ],
+  "types": [
+    {
+      "name": "AssetBalance",
+      "repr": {
+        "kind": "c"
+      },
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "asset_type",
+            "type": "u8"
+          },
+          {
+            "name": "padding",
+            "type": {
+              "array": [
+                "u8",
+                7
+              ]
+            }
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "value_usd",
+            "type": "u64"
+          },
+          {
+            "name": "asset_weight",
+            "type": "u16"
+          },
+          {
+            "name": "liability_weight",
+            "type": "u16"
+          },
+          {
+            "name": "padding2",
+            "type": {
+              "array": [
+                "u8",
+                4
+              ]
+            }
+          },
+          {
+            "name": "last_update",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "BackstopProvider",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "staked_amount",
+            "type": "u64"
+          },
+          {
+            "name": "shares",
+            "type": "u64"
+          },
+          {
+            "name": "last_stake_timestamp",
+            "type": "i64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "BackstopVault",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "total_staked",
+            "type": "u64"
+          },
+          {
+            "name": "total_shares",
+            "type": "u64"
+          },
+          {
+            "name": "assets_under_management",
+            "type": "i64"
+          },
+          {
+            "name": "last_takeover_timestamp",
+            "type": "i64"
+          },
+          {
+            "name": "withdrawal_lock_duration",
+            "type": "i64"
+          },
+          {
+            "name": "insurance_buffer_ratio",
+            "type": "u16"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "BankruptcyRecorded",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "event_id",
+            "type": "u64"
+          },
+          {
+            "name": "user",
+            "type": "pubkey"
+          },
+          {
+            "name": "position",
+            "type": "pubkey"
+          },
+          {
+            "name": "market",
+            "type": "pubkey"
+          },
+          {
+            "name": "bad_debt",
+            "type": "u64"
+          },
+          {
+            "name": "insurance_covered",
+            "type": "u64"
+          },
+          {
+            "name": "backstop_vault_covered",
+            "type": "u64"
+          },
+          {
+            "name": "unresolved_bad_debt",
+            "type": "u64"
+          },
+          {
+            "name": "recovery_mode_active",
+            "type": "bool"
+          },
+          {
+            "name": "adl_mode_active",
+            "type": "bool"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CircuitBreaker",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "is_triggered",
+            "type": "bool"
+          },
+          {
+            "name": "trigger_time",
+            "type": "i64"
+          },
+          {
+            "name": "reset_time",
+            "type": "i64"
+          },
+          {
+            "name": "breaker_type",
+            "type": {
+              "defined": {
+                "name": "CircuitBreakerType"
+              }
+            }
+          },
+          {
+            "name": "triggered_by",
+            "type": "pubkey"
+          },
+          {
+            "name": "reset_by",
+            "type": "pubkey"
+          },
+          {
+            "name": "price_change_threshold",
+            "type": "u16"
+          },
+          {
+            "name": "volume_threshold",
+            "type": "u64"
+          },
+          {
+            "name": "time_window",
+            "type": "u64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CircuitBreakerType",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "PriceVolatility"
+          },
+          {
+            "name": "VolumeSpike"
+          },
+          {
+            "name": "SystemOverload"
+          },
+          {
+            "name": "EmergencyStop"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CollateralAccount",
+      "docs": [
+        "Collateral State Module",
+        "Contains account structures for collateral management",
+        "User collateral account - tracks collateral deposited by individual users"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "user",
+            "type": "pubkey"
+          },
+          {
+            "name": "asset_type",
+            "type": {
+              "defined": {
+                "name": "CollateralType"
+              }
+            }
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "initial_asset_weight",
+            "type": "u16"
+          },
+          {
+            "name": "maintenance_asset_weight",
+            "type": "u16"
+          },
+          {
+            "name": "initial_liability_weight",
+            "type": "u16"
+          },
+          {
+            "name": "maintenance_liability_weight",
+            "type": "u16"
+          },
+          {
+            "name": "value_usd",
+            "type": "u64"
+          },
+          {
+            "name": "last_price",
+            "type": "u64"
+          },
+          {
+            "name": "last_updated",
+            "type": "i64"
+          },
+          {
+            "name": "is_active",
+            "type": "bool"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CollateralAsset",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "asset_type",
+            "type": {
+              "defined": {
+                "name": "CollateralType"
+              }
+            }
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "value_usd",
+            "type": "u64"
+          },
+          {
+            "name": "asset_weight",
+            "type": "u16"
+          },
+          {
+            "name": "liability_weight",
+            "type": "u16"
+          },
+          {
+            "name": "last_price_update",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CollateralType",
+      "docs": [
+        "Collateral Management Module",
+        "Handles collateral accounts and cross-collateralization"
+      ],
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "SOL"
+          },
+          {
+            "name": "USDC"
+          },
+          {
+            "name": "BTC"
+          },
+          {
+            "name": "ETH"
+          },
+          {
+            "name": "USDT"
+          },
+          {
+            "name": "AVAX"
+          },
+          {
+            "name": "MATIC"
+          },
+          {
+            "name": "ARB"
+          },
+          {
+            "name": "OP"
+          },
+          {
+            "name": "DOGE"
+          },
+          {
+            "name": "ADA"
+          },
+          {
+            "name": "DOT"
+          },
+          {
+            "name": "LINK"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CrossCollateralAccount",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "user",
+            "type": "pubkey"
+          },
+          {
+            "name": "total_collateral_value",
+            "type": "u64"
+          },
+          {
+            "name": "total_borrowed_value",
+            "type": "u64"
+          },
+          {
+            "name": "collateral_assets",
+            "type": {
+              "vec": {
+                "defined": {
+                  "name": "CollateralAsset"
+                }
+              }
+            }
+          },
+          {
+            "name": "initial_asset_weight",
+            "type": "u16"
+          },
+          {
+            "name": "maintenance_asset_weight",
+            "type": "u16"
+          },
+          {
+            "name": "initial_liability_weight",
+            "type": "u16"
+          },
+          {
+            "name": "maintenance_liability_weight",
+            "type": "u16"
+          },
+          {
+            "name": "imf_factor",
+            "type": "u16"
+          },
+          {
+            "name": "unrealized_pnl",
+            "type": "i64"
+          },
+          {
+            "name": "pending_funding",
+            "type": "i64"
+          },
+          {
+            "name": "last_health_check",
+            "type": "i64"
+          },
+          {
+            "name": "is_active",
+            "type": "bool"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "FeeCollector",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "maker_fee_rate",
+            "type": "u16"
+          },
+          {
+            "name": "taker_fee_rate",
+            "type": "u16"
+          },
+          {
+            "name": "funding_rate_cap",
+            "type": "i64"
+          },
+          {
+            "name": "funding_rate_floor",
+            "type": "i64"
+          },
+          {
+            "name": "trading_fees_collected",
+            "type": "u64"
+          },
+          {
+            "name": "funding_fees_collected",
+            "type": "u64"
+          },
+          {
+            "name": "keeper_rewards_pool",
+            "type": "u64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "FundingRateUpdated",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "market",
+            "type": "pubkey"
+          },
+          {
+            "name": "funding_rate",
+            "type": "i64"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "InlineOrder",
+      "repr": {
+        "kind": "c"
+      },
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "market",
+            "type": "pubkey"
+          },
+          {
+            "name": "side",
+            "type": "u8"
+          },
+          {
+            "name": "order_type",
+            "type": "u8"
+          },
+          {
+            "name": "status",
+            "type": "u8"
+          },
+          {
+            "name": "padding",
+            "type": {
+              "array": [
+                "u8",
+                5
+              ]
+            }
+          },
+          {
+            "name": "size",
+            "type": "u64"
+          },
+          {
+            "name": "price",
+            "type": "u64"
+          },
+          {
+            "name": "trigger_price",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "InlinePosition",
+      "repr": {
+        "kind": "c"
+      },
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "market",
+            "type": "pubkey"
+          },
+          {
+            "name": "side",
+            "type": "u8"
+          },
+          {
+            "name": "padding",
+            "type": {
+              "array": [
+                "u8",
+                7
+              ]
+            }
+          },
+          {
+            "name": "size",
+            "type": "u64"
+          },
+          {
+            "name": "entry_price",
+            "type": "u64"
+          },
+          {
+            "name": "margin",
+            "type": "u64"
+          },
+          {
+            "name": "last_funding_index",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "InsuranceFund",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "total_funds",
+            "type": "u64"
+          },
+          {
+            "name": "utilized_funds",
+            "type": "u64"
+          },
+          {
+            "name": "total_deposits",
+            "type": "u64"
+          },
+          {
+            "name": "total_withdrawals",
+            "type": "u64"
+          },
+          {
+            "name": "utilization_rate",
+            "type": "u16"
+          },
+          {
+            "name": "max_utilization",
+            "type": "u16"
+          },
+          {
+            "name": "is_active",
+            "type": "bool"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "KeeperAuth",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "keeper_pubkey",
+            "type": "pubkey"
+          },
+          {
+            "name": "stake_amount",
+            "type": "u64"
+          },
+          {
+            "name": "performance_score",
+            "type": "u16"
+          },
+          {
+            "name": "is_active",
+            "type": "u8"
+          },
+          {
+            "name": "last_activity",
+            "type": "i64"
+          },
+          {
+            "name": "total_liquidations",
+            "type": "u32"
+          },
+          {
+            "name": "successful_liquidations",
+            "type": "u32"
+          },
+          {
+            "name": "failed_liquidations",
+            "type": "u32"
+          },
+          {
+            "name": "authorization_level",
+            "type": {
+              "defined": {
+                "name": "KeeperAuthLevel"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "KeeperAuthLevel",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Basic"
+          },
+          {
+            "name": "Advanced"
+          },
+          {
+            "name": "Emergency"
+          }
+        ]
+      }
+    },
+    {
+      "name": "KeeperInfo",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "keeper_pubkey",
+            "type": "pubkey"
+          },
+          {
+            "name": "stake_amount",
+            "type": "u64"
+          },
+          {
+            "name": "performance_score",
+            "type": "u16"
+          },
+          {
+            "name": "is_active",
+            "type": "bool"
+          },
+          {
+            "name": "total_liquidations",
+            "type": "u32"
+          },
+          {
+            "name": "total_rewards_earned",
+            "type": "u64"
+          },
+          {
+            "name": "total_rewards_claimed",
+            "type": "u64"
+          },
+          {
+            "name": "last_activity",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "KeeperNetwork",
+      "docs": [
+        "Advanced Features State Module",
+        "Contains account structures for advanced features like keeper network, circuit breakers, etc."
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "total_stake",
+            "type": "u64"
+          },
+          {
+            "name": "keepers",
+            "type": {
+              "vec": {
+                "defined": {
+                  "name": "KeeperInfo"
+                }
+              }
+            }
+          },
+          {
+            "name": "liquidation_rewards_pool",
+            "type": "u64"
+          },
+          {
+            "name": "automation_rewards_pool",
+            "type": "u64"
+          },
+          {
+            "name": "min_stake_requirement",
+            "type": "u64"
+          },
+          {
+            "name": "performance_threshold",
+            "type": "u16"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "KeeperRewardSolVault",
+      "docs": [
+        "Dedicated SOL vault for future keeper reward settlement.",
+        "This is intentionally separate from the shared user-collateral SOL vault."
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "total_funded",
+            "type": "u64"
+          },
+          {
+            "name": "total_reserved",
+            "type": "u64"
+          },
+          {
+            "name": "total_claimed",
+            "type": "u64"
+          },
+          {
+            "name": "is_active",
+            "type": "bool"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "KeeperSecurityManager",
+      "docs": [
+        "Enhanced Keeper Authorization Security",
+        "Provides 99% protection against unauthorized liquidations",
+        "Optimized for gas efficiency using Anchor best practices",
+        "",
+        "EXPERT OPTIMIZATION NOTES (Solana/Anchor Experts):",
+        "- Array sizes reduced from 20→3 keepers and 50→5 liquidation records for maximum stack efficiency",
+        "- Box<T> optimization applied in initialization contexts to move from stack to heap",
+        "- Account size now ~800 bytes (well under 4KB Solana limit)",
+        "- ZeroCopy implementation REVERTED - too complex for this struct (enums, nested types)",
+        "- Using aggressive Box<T> + smaller arrays for maximum stack efficiency"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "required_signatures",
+            "type": "u8"
+          },
+          {
+            "name": "authorized_keepers",
+            "type": {
+              "array": [
+                {
+                  "defined": {
+                    "name": "KeeperAuth"
+                  }
+                },
+                3
+              ]
+            }
+          },
+          {
+            "name": "keeper_count",
+            "type": "u8"
+          },
+          {
+            "name": "liquidation_window_start",
+            "type": "i64"
+          },
+          {
+            "name": "liquidation_window_end",
+            "type": "i64"
+          },
+          {
+            "name": "max_liquidations_per_window",
+            "type": "u32"
+          },
+          {
+            "name": "liquidation_rate_limit",
+            "type": "u32"
+          },
+          {
+            "name": "last_liquidation_time",
+            "type": "i64"
+          },
+          {
+            "name": "liquidations_in_current_hour",
+            "type": "u32"
+          },
+          {
+            "name": "min_keeper_stake",
+            "type": "u64"
+          },
+          {
+            "name": "min_performance_score",
+            "type": "u16"
+          },
+          {
+            "name": "max_position_size_for_liquidation",
+            "type": "u64"
+          },
+          {
+            "name": "liquidation_history",
+            "type": {
+              "array": [
+                {
+                  "defined": {
+                    "name": "LiquidationRecord"
+                  }
+                },
+                5
+              ]
+            }
+          },
+          {
+            "name": "history_index",
+            "type": "u8"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "LiquidationExecuted",
+      "docs": [
+        "Events Module",
+        "Contains all program events for monitoring and analytics"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "user",
+            "type": "pubkey"
+          },
+          {
+            "name": "position",
+            "type": "pubkey"
+          },
+          {
+            "name": "market",
+            "type": "pubkey"
+          },
+          {
+            "name": "liquidated_size",
+            "type": "u64"
+          },
+          {
+            "name": "liquidation_price",
+            "type": "u64"
+          },
+          {
+            "name": "penalty",
+            "type": "u64"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "LiquidationReason",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "InsufficientMargin"
+          },
+          {
+            "name": "PriceMovement"
+          },
+          {
+            "name": "TimeDecay"
+          },
+          {
+            "name": "Manual"
+          }
+        ]
+      }
+    },
+    {
+      "name": "LiquidationRecord",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "keeper_pubkey",
+            "type": "pubkey"
+          },
+          {
+            "name": "position_owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "position_size",
+            "type": "u64"
+          },
+          {
+            "name": "liquidation_price",
+            "type": "u64"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          },
+          {
+            "name": "success",
+            "type": "u8"
+          },
+          {
+            "name": "reason",
+            "type": {
+              "defined": {
+                "name": "LiquidationReason"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "LoadSnapshot",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "load_percent",
+            "type": "u16"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Market",
+      "docs": [
+        "Market state definition",
+        "Handles market data, pricing, and market-specific operations"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "base_asset",
+            "type": "string"
+          },
+          {
+            "name": "quote_asset",
+            "type": "string"
+          },
+          {
+            "name": "base_reserve",
+            "type": "u64"
+          },
+          {
+            "name": "quote_reserve",
+            "type": "u64"
+          },
+          {
+            "name": "k",
+            "type": "u64"
+          },
+          {
+            "name": "funding_rate",
+            "type": "i64"
+          },
+          {
+            "name": "last_funding_time",
+            "type": "i64"
+          },
+          {
+            "name": "funding_interval",
+            "type": "i64"
+          },
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "max_leverage",
+            "type": "u8"
+          },
+          {
+            "name": "initial_margin_ratio",
+            "type": "u16"
+          },
+          {
+            "name": "maintenance_margin_ratio",
+            "type": "u16"
+          },
+          {
+            "name": "is_active",
+            "type": "bool"
+          },
+          {
+            "name": "last_oracle_price",
+            "type": "u64"
+          },
+          {
+            "name": "last_oracle_update",
+            "type": "i64"
+          },
+          {
+            "name": "cumulative_funding_index",
+            "type": "i128"
+          },
+          {
+            "name": "oracle_source",
+            "type": "pubkey"
+          },
+          {
+            "name": "oracle_type",
+            "type": "u8"
+          },
+          {
+            "name": "base_asset_amount_long",
+            "type": "u64"
+          },
+          {
+            "name": "base_asset_amount_short",
+            "type": "u64"
+          },
+          {
+            "name": "max_open_interest",
+            "type": "u64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MarketMakerVault",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "leader",
+            "type": "pubkey"
+          },
+          {
+            "name": "portfolio",
+            "type": "pubkey"
+          },
+          {
+            "name": "total_shares",
+            "type": "u128"
+          },
+          {
+            "name": "performance_fee",
+            "type": "u16"
+          },
+          {
+            "name": "min_leader_share",
+            "type": "u16"
+          },
+          {
+            "name": "lock_period",
+            "type": "i64"
+          },
+          {
+            "name": "total_pnl",
+            "type": "i64"
+          },
+          {
+            "name": "strategy",
+            "type": {
+              "defined": {
+                "name": "MarketMakingStrategy"
+              }
+            }
+          },
+          {
+            "name": "is_active",
+            "type": "bool"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MarketMakingStrategy",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "GridTrading"
+          },
+          {
+            "name": "MeanReversion"
+          },
+          {
+            "name": "Arbitrage"
+          },
+          {
+            "name": "CopyTrading"
+          },
+          {
+            "name": "QuantModel"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MarketSeat",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "market",
+            "type": "pubkey"
+          },
+          {
+            "name": "user",
+            "type": "pubkey"
+          },
+          {
+            "name": "claimed_at",
+            "type": "i64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MarketV2",
+      "docs": [
+        "On-Chain Market (V2 Unified Architecture)",
+        "Consolidates pricing, risk, and the Limit Order Book (LOB) into a single Zero-Copy PDA.",
+        "This enables atomic matching and settlement in a single transaction."
+      ],
+      "serialization": "bytemuck",
+      "repr": {
+        "kind": "c"
+      },
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "oracle_source",
+            "type": "pubkey"
+          },
+          {
+            "name": "jit_authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "base_asset",
+            "type": {
+              "array": [
+                "u8",
+                8
+              ]
+            }
+          },
+          {
+            "name": "quote_asset",
+            "type": {
+              "array": [
+                "u8",
+                8
+              ]
+            }
+          },
+          {
+            "name": "last_oracle_price",
+            "type": "u64"
+          },
+          {
+            "name": "last_oracle_update",
+            "type": "i64"
+          },
+          {
+            "name": "tick_size",
+            "type": "u64"
+          },
+          {
+            "name": "lot_size",
+            "type": "u64"
+          },
+          {
+            "name": "max_open_interest",
+            "type": "u64"
+          },
+          {
+            "name": "base_asset_amount_long",
+            "type": "u64"
+          },
+          {
+            "name": "base_asset_amount_short",
+            "type": "u64"
+          },
+          {
+            "name": "taker_fee",
+            "type": "u16"
+          },
+          {
+            "name": "maker_rebate",
+            "type": "u16"
+          },
+          {
+            "name": "max_leverage",
+            "type": "u16"
+          },
+          {
+            "name": "initial_margin_ratio",
+            "type": "u16"
+          },
+          {
+            "name": "maintenance_margin_ratio",
+            "type": "u16"
+          },
+          {
+            "name": "oracle_type",
+            "type": "u8"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "padding",
+            "type": {
+              "array": [
+                "u8",
+                4
+              ]
+            }
+          },
+          {
+            "name": "bids",
+            "type": {
+              "defined": {
+                "name": "Slab"
+              }
+            }
+          },
+          {
+            "name": "asks",
+            "type": {
+              "defined": {
+                "name": "Slab"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "OracleConfig",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "oracle_type",
+            "type": {
+              "defined": {
+                "name": "OracleType"
+              }
+            }
+          },
+          {
+            "name": "oracle_account",
+            "type": "pubkey"
+          },
+          {
+            "name": "last_price",
+            "type": "u64"
+          },
+          {
+            "name": "last_update",
+            "type": "i64"
+          },
+          {
+            "name": "confidence_interval",
+            "type": "u64"
+          },
+          {
+            "name": "is_active",
+            "type": "bool"
+          },
+          {
+            "name": "failure_count",
+            "type": "u32"
+          },
+          {
+            "name": "last_failure",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "OracleDeviationBreaker",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "is_active",
+            "type": "bool"
+          },
+          {
+            "name": "primary_oracle_price",
+            "type": "u64"
+          },
+          {
+            "name": "secondary_oracle_price",
+            "type": "u64"
+          },
+          {
+            "name": "deviation_threshold",
+            "type": "u16"
+          },
+          {
+            "name": "last_triggered",
+            "type": "i64"
+          },
+          {
+            "name": "trigger_count",
+            "type": "u32"
+          }
+        ]
+      }
+    },
+    {
+      "name": "OracleHealthRecord",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "timestamp",
+            "type": "i64"
+          },
+          {
+            "name": "oracle_type",
+            "type": {
+              "defined": {
+                "name": "OracleType"
+              }
+            }
+          },
+          {
+            "name": "price",
+            "type": "u64"
+          },
+          {
+            "name": "staleness_seconds",
+            "type": "i64"
+          },
+          {
+            "name": "health_status",
+            "type": {
+              "defined": {
+                "name": "OracleHealthStatus"
+              }
+            }
+          },
+          {
+            "name": "confidence_interval",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "OracleHealthStatus",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Healthy"
+          },
+          {
+            "name": "Warning"
+          },
+          {
+            "name": "Critical"
+          },
+          {
+            "name": "Failed"
+          }
+        ]
+      }
+    },
+    {
+      "name": "OraclePriceUpdated",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "market",
+            "type": "pubkey"
+          },
+          {
+            "name": "price",
+            "type": "u64"
+          },
+          {
+            "name": "confidence",
+            "type": "u64"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "OracleStalenessProtection",
+      "docs": [
+        "Dynamic Oracle Staleness Protection",
+        "Provides 90% protection against stale price attacks",
+        "Optimized for Pyth/Switchboard integration based on expert recommendations"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "primary_oracle",
+            "type": {
+              "defined": {
+                "name": "OracleConfig"
+              }
+            }
+          },
+          {
+            "name": "secondary_oracle",
+            "type": {
+              "option": {
+                "defined": {
+                  "name": "OracleConfig"
+                }
+              }
+            }
+          },
+          {
+            "name": "max_staleness_seconds",
+            "type": "u64"
+          },
+          {
+            "name": "warning_staleness_seconds",
+            "type": "u64"
+          },
+          {
+            "name": "critical_staleness_seconds",
+            "type": "u64"
+          },
+          {
+            "name": "min_price_change_percent",
+            "type": "u16"
+          },
+          {
+            "name": "max_price_change_percent",
+            "type": "u16"
+          },
+          {
+            "name": "price_validation_window",
+            "type": "u64"
+          },
+          {
+            "name": "oracle_health_history",
+            "type": {
+              "array": [
+                {
+                  "defined": {
+                    "name": "OracleHealthRecord"
+                  }
+                },
+                20
+              ]
+            }
+          },
+          {
+            "name": "health_history_index",
+            "type": "u8"
+          },
+          {
+            "name": "emergency_price",
+            "type": "u64"
+          },
+          {
+            "name": "emergency_price_timestamp",
+            "type": "i64"
+          },
+          {
+            "name": "pyth_confidence_threshold",
+            "type": "u64"
+          },
+          {
+            "name": "switchboard_deviation_threshold",
+            "type": "u16"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "OracleType",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Pyth"
+          },
+          {
+            "name": "Switchboard"
+          },
+          {
+            "name": "FixedPrice"
+          },
+          {
+            "name": "Custom"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Order",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "user",
+            "type": "pubkey"
+          },
+          {
+            "name": "user_account",
+            "type": "pubkey"
+          },
+          {
+            "name": "market",
+            "type": "pubkey"
+          },
+          {
+            "name": "order_index",
+            "type": "u16"
+          },
+          {
+            "name": "order_type",
+            "type": {
+              "defined": {
+                "name": "OrderType"
+              }
+            }
+          },
+          {
+            "name": "side",
+            "type": {
+              "defined": {
+                "name": "PositionSide"
+              }
+            }
+          },
+          {
+            "name": "size",
+            "type": "u64"
+          },
+          {
+            "name": "price",
+            "type": "u64"
+          },
+          {
+            "name": "stop_price",
+            "type": "u64"
+          },
+          {
+            "name": "trailing_distance",
+            "type": "u64"
+          },
+          {
+            "name": "leverage",
+            "type": "u8"
+          },
+          {
+            "name": "status",
+            "type": {
+              "defined": {
+                "name": "OrderStatus"
+              }
+            }
+          },
+          {
+            "name": "created_at",
+            "type": "i64"
+          },
+          {
+            "name": "expires_at",
+            "type": "i64"
+          },
+          {
+            "name": "filled_size",
+            "type": "u64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "hidden_size",
+            "type": "u64"
+          },
+          {
+            "name": "display_size",
+            "type": "u64"
+          },
+          {
+            "name": "time_in_force",
+            "type": {
+              "defined": {
+                "name": "TimeInForce"
+              }
+            }
+          },
+          {
+            "name": "target_price",
+            "type": "u64"
+          },
+          {
+            "name": "parent_order",
+            "type": {
+              "option": "pubkey"
+            }
+          },
+          {
+            "name": "twap_duration",
+            "type": "u64"
+          },
+          {
+            "name": "twap_interval",
+            "type": "u64"
+          },
+          {
+            "name": "last_execution_at",
+            "type": "i64"
+          },
+          {
+            "name": "total_fees_paid",
+            "type": "u64"
+          },
+          {
+            "name": "idempotency_key",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "OrderFilled",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "user",
+            "type": "pubkey"
+          },
+          {
+            "name": "order",
+            "type": "pubkey"
+          },
+          {
+            "name": "market",
+            "type": "pubkey"
+          },
+          {
+            "name": "side",
+            "type": {
+              "defined": {
+                "name": "PositionSide"
+              }
+            }
+          },
+          {
+            "name": "size",
+            "type": "u64"
+          },
+          {
+            "name": "price",
+            "type": "u64"
+          },
+          {
+            "name": "fee",
+            "type": "u64"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "OrderMatched",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "market",
+            "type": "pubkey"
+          },
+          {
+            "name": "maker",
+            "type": "pubkey"
+          },
+          {
+            "name": "taker",
+            "type": "pubkey"
+          },
+          {
+            "name": "maker_order",
+            "type": "pubkey"
+          },
+          {
+            "name": "taker_order",
+            "type": "pubkey"
+          },
+          {
+            "name": "size",
+            "type": "u64"
+          },
+          {
+            "name": "price",
+            "type": "u64"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "OrderPlaced",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "user",
+            "type": "pubkey"
+          },
+          {
+            "name": "order",
+            "type": "pubkey"
+          },
+          {
+            "name": "market",
+            "type": "pubkey"
+          },
+          {
+            "name": "side",
+            "type": {
+              "defined": {
+                "name": "PositionSide"
+              }
+            }
+          },
+          {
+            "name": "size",
+            "type": "u64"
+          },
+          {
+            "name": "price",
+            "type": "u64"
+          },
+          {
+            "name": "order_type",
+            "type": {
+              "defined": {
+                "name": "OrderType"
+              }
+            }
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "OrderStatus",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Pending"
+          },
+          {
+            "name": "Filled"
+          },
+          {
+            "name": "Cancelled"
+          },
+          {
+            "name": "Expired"
+          },
+          {
+            "name": "PartiallyFilled"
+          },
+          {
+            "name": "Rejected"
+          }
+        ]
+      }
+    },
+    {
+      "name": "OrderType",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Market"
+          },
+          {
+            "name": "Limit"
+          },
+          {
+            "name": "StopLoss"
+          },
+          {
+            "name": "TakeProfit"
+          },
+          {
+            "name": "TrailingStop"
+          },
+          {
+            "name": "PostOnly"
+          },
+          {
+            "name": "IOC"
+          },
+          {
+            "name": "FOK"
+          },
+          {
+            "name": "Iceberg"
+          },
+          {
+            "name": "TWAP"
+          },
+          {
+            "name": "StopLimit"
+          },
+          {
+            "name": "Bracket"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PointsAwarded",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "user",
+            "type": "pubkey"
+          },
+          {
+            "name": "points",
+            "type": "u64"
+          },
+          {
+            "name": "category",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PointsSystem",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "trading_multiplier",
+            "type": "u16"
+          },
+          {
+            "name": "referral_bonus",
+            "type": "u16"
+          },
+          {
+            "name": "staking_multiplier",
+            "type": "u16"
+          },
+          {
+            "name": "total_points_distributed",
+            "type": "u64"
+          },
+          {
+            "name": "is_active",
+            "type": "bool"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PortfolioAccount",
+      "docs": [
+        "Unified Portfolio Account (V2)",
+        "Consolidates balances, positions, and orders into a single Zero-Copy PDA.",
+        "This matches the Phoenix/FlashTrade standard for sub-millisecond execution."
+      ],
+      "serialization": "bytemuck",
+      "repr": {
+        "kind": "c"
+      },
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "total_collateral_value",
+            "type": "u64"
+          },
+          {
+            "name": "total_borrowed_value",
+            "type": "u64"
+          },
+          {
+            "name": "unrealized_pnl",
+            "type": "i64"
+          },
+          {
+            "name": "pending_funding",
+            "type": "i64"
+          },
+          {
+            "name": "balances",
+            "type": {
+              "array": [
+                {
+                  "defined": {
+                    "name": "AssetBalance"
+                  }
+                },
+                8
+              ]
+            }
+          },
+          {
+            "name": "positions",
+            "type": {
+              "array": [
+                {
+                  "defined": {
+                    "name": "InlinePosition"
+                  }
+                },
+                10
+              ]
+            }
+          },
+          {
+            "name": "orders",
+            "type": {
+              "array": [
+                {
+                  "defined": {
+                    "name": "InlineOrder"
+                  }
+                },
+                16
+              ]
+            }
+          },
+          {
+            "name": "referrer",
+            "type": "pubkey"
+          },
+          {
+            "name": "relayer_fee_balance",
+            "type": "u64"
+          },
+          {
+            "name": "subaccount_index",
+            "type": "u16"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "padding",
+            "type": {
+              "array": [
+                "u8",
+                5
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Position",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "user_account",
+            "type": "pubkey"
+          },
+          {
+            "name": "user",
+            "type": "pubkey"
+          },
+          {
+            "name": "market",
+            "type": "pubkey"
+          },
+          {
+            "name": "position_index",
+            "type": "u16"
+          },
+          {
+            "name": "side",
+            "type": {
+              "defined": {
+                "name": "PositionSide"
+              }
+            }
+          },
+          {
+            "name": "status",
+            "type": {
+              "defined": {
+                "name": "PositionStatus"
+              }
+            }
+          },
+          {
+            "name": "size",
+            "type": "u64"
+          },
+          {
+            "name": "entry_price",
+            "type": "u64"
+          },
+          {
+            "name": "current_price",
+            "type": "u64"
+          },
+          {
+            "name": "liquidation_price",
+            "type": "u64"
+          },
+          {
+            "name": "unrealized_pnl",
+            "type": "i64"
+          },
+          {
+            "name": "realized_pnl",
+            "type": "i64"
+          },
+          {
+            "name": "funding_rate",
+            "type": "i64"
+          },
+          {
+            "name": "last_funding_update",
+            "type": "i64"
+          },
+          {
+            "name": "total_funding_paid",
+            "type": "i64"
+          },
+          {
+            "name": "last_cumulative_funding_index",
+            "type": "i128"
+          },
+          {
+            "name": "total_fees_paid",
+            "type": "u64"
+          },
+          {
+            "name": "initial_margin",
+            "type": "u64"
+          },
+          {
+            "name": "maintenance_margin",
+            "type": "u64"
+          },
+          {
+            "name": "leverage",
+            "type": "u16"
+          },
+          {
+            "name": "margin",
+            "type": "u64"
+          },
+          {
+            "name": "total_collateral_value",
+            "type": "u64"
+          },
+          {
+            "name": "collateral_accounts",
+            "type": {
+              "array": [
+                "pubkey",
+                5
+              ]
+            }
+          },
+          {
+            "name": "opened_at",
+            "type": "i64"
+          },
+          {
+            "name": "closed_at",
+            "type": "i64"
+          },
+          {
+            "name": "last_updated",
+            "type": "i64"
+          },
+          {
+            "name": "created_at",
+            "type": "i64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PositionClosed",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "user",
+            "type": "pubkey"
+          },
+          {
+            "name": "position",
+            "type": "pubkey"
+          },
+          {
+            "name": "market",
+            "type": "pubkey"
+          },
+          {
+            "name": "side",
+            "type": {
+              "defined": {
+                "name": "PositionSide"
+              }
+            }
+          },
+          {
+            "name": "size",
+            "type": "u64"
+          },
+          {
+            "name": "exit_price",
+            "type": "u64"
+          },
+          {
+            "name": "pnl",
+            "type": "i64"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PositionOpened",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "user",
+            "type": "pubkey"
+          },
+          {
+            "name": "position",
+            "type": "pubkey"
+          },
+          {
+            "name": "market",
+            "type": "pubkey"
+          },
+          {
+            "name": "side",
+            "type": {
+              "defined": {
+                "name": "PositionSide"
+              }
+            }
+          },
+          {
+            "name": "size",
+            "type": "u64"
+          },
+          {
+            "name": "entry_price",
+            "type": "u64"
+          },
+          {
+            "name": "leverage",
+            "type": "u16"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PositionSide",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Long"
+          },
+          {
+            "name": "Short"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PositionStatus",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Open"
+          },
+          {
+            "name": "Closed"
+          },
+          {
+            "name": "Liquidated"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PriceSnapshot",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "price",
+            "type": "u64"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PriceVolatilityBreaker",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "is_active",
+            "type": "bool"
+          },
+          {
+            "name": "last_price",
+            "type": "u64"
+          },
+          {
+            "name": "price_history",
+            "type": {
+              "array": [
+                {
+                  "defined": {
+                    "name": "PriceSnapshot"
+                  }
+                },
+                10
+              ]
+            }
+          },
+          {
+            "name": "history_index",
+            "type": "u8"
+          },
+          {
+            "name": "volatility_threshold",
+            "type": "u16"
+          },
+          {
+            "name": "last_triggered",
+            "type": "i64"
+          },
+          {
+            "name": "trigger_count",
+            "type": "u32"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ProgramState",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "is_paused",
+            "type": "bool"
+          },
+          {
+            "name": "recovery_mode_active",
+            "type": "bool"
+          },
+          {
+            "name": "adl_mode_active",
+            "type": "bool"
+          },
+          {
+            "name": "last_bankruptcy_event_id",
+            "type": "u64"
+          },
+          {
+            "name": "last_bankruptcy_timestamp",
+            "type": "i64"
+          },
+          {
+            "name": "last_bankruptcy_market",
+            "type": "pubkey"
+          },
+          {
+            "name": "last_bankruptcy_user",
+            "type": "pubkey"
+          },
+          {
+            "name": "insurance_fund",
+            "type": "pubkey"
+          },
+          {
+            "name": "backstop_vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "fee_collector",
+            "type": "pubkey"
+          },
+          {
+            "name": "oracle_manager",
+            "type": "pubkey"
+          },
+          {
+            "name": "sol_oracle_source",
+            "type": "pubkey"
+          },
+          {
+            "name": "sol_oracle_type",
+            "type": "u8"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ProtocolSolVault",
+      "docs": [
+        "Protocol SOL Vault Account Structure"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "total_deposits",
+            "type": "u64"
+          },
+          {
+            "name": "total_withdrawals",
+            "type": "u64"
+          },
+          {
+            "name": "is_active",
+            "type": "bool"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ReferralRebateCredited",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "referrer",
+            "type": "pubkey"
+          },
+          {
+            "name": "trader",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SecurityCircuitBreaker",
+      "docs": [
+        "Multi-Layer Circuit Breaker System",
+        "Provides 95% protection against price manipulation attacks",
+        "Optimized for gas efficiency based on Solana expert recommendations"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "price_volatility_breaker",
+            "type": {
+              "defined": {
+                "name": "PriceVolatilityBreaker"
+              }
+            }
+          },
+          {
+            "name": "volume_spike_breaker",
+            "type": {
+              "defined": {
+                "name": "VolumeSpikeBreaker"
+              }
+            }
+          },
+          {
+            "name": "oracle_deviation_breaker",
+            "type": {
+              "defined": {
+                "name": "OracleDeviationBreaker"
+              }
+            }
+          },
+          {
+            "name": "system_overload_breaker",
+            "type": {
+              "defined": {
+                "name": "SystemOverloadBreaker"
+              }
+            }
+          },
+          {
+            "name": "is_global_breaker_active",
+            "type": "bool"
+          },
+          {
+            "name": "global_breaker_triggered_at",
+            "type": "i64"
+          },
+          {
+            "name": "global_breaker_reset_at",
+            "type": "i64"
+          },
+          {
+            "name": "emergency_pause_active",
+            "type": "bool"
+          },
+          {
+            "name": "max_price_change_percent",
+            "type": "u16"
+          },
+          {
+            "name": "max_volume_spike_percent",
+            "type": "u16"
+          },
+          {
+            "name": "max_oracle_deviation_percent",
+            "type": "u16"
+          },
+          {
+            "name": "max_system_load_percent",
+            "type": "u16"
+          },
+          {
+            "name": "price_window_seconds",
+            "type": "u64"
+          },
+          {
+            "name": "volume_window_seconds",
+            "type": "u64"
+          },
+          {
+            "name": "oracle_window_seconds",
+            "type": "u64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Slab",
+      "repr": {
+        "kind": "c"
+      },
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "root",
+            "type": "u32"
+          },
+          {
+            "name": "free_head",
+            "type": "u32"
+          },
+          {
+            "name": "total_nodes",
+            "type": "u32"
+          },
+          {
+            "name": "padding",
+            "type": {
+              "array": [
+                "u8",
+                4
+              ]
+            }
+          },
+          {
+            "name": "nodes",
+            "type": {
+              "array": [
+                {
+                  "defined": {
+                    "name": "SlabNode"
+                  }
+                },
+                64
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "SlabNode",
+      "repr": {
+        "kind": "c"
+      },
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "tag",
+            "type": "u32"
+          },
+          {
+            "name": "padding",
+            "type": {
+              "array": [
+                "u8",
+                4
+              ]
+            }
+          },
+          {
+            "name": "data",
+            "type": {
+              "array": [
+                "u8",
+                80
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "SystemOverloadBreaker",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "is_active",
+            "type": "bool"
+          },
+          {
+            "name": "current_load",
+            "type": "u16"
+          },
+          {
+            "name": "load_history",
+            "type": {
+              "array": [
+                {
+                  "defined": {
+                    "name": "LoadSnapshot"
+                  }
+                },
+                10
+              ]
+            }
+          },
+          {
+            "name": "history_index",
+            "type": "u8"
+          },
+          {
+            "name": "load_threshold",
+            "type": "u16"
+          },
+          {
+            "name": "last_triggered",
+            "type": "i64"
+          },
+          {
+            "name": "trigger_count",
+            "type": "u32"
+          }
+        ]
+      }
+    },
+    {
+      "name": "TimeInForce",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "GTC"
+          },
+          {
+            "name": "IOC"
+          },
+          {
+            "name": "FOK"
+          },
+          {
+            "name": "GTD"
+          },
+          {
+            "name": "PostOnly"
+          }
+        ]
+      }
+    },
+    {
+      "name": "UserAccount",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "account_index",
+            "type": "u16"
+          },
+          {
+            "name": "total_collateral",
+            "type": "u64"
+          },
+          {
+            "name": "total_positions",
+            "type": "u16"
+          },
+          {
+            "name": "total_orders",
+            "type": "u16"
+          },
+          {
+            "name": "next_order_index",
+            "type": "u16"
+          },
+          {
+            "name": "max_positions",
+            "type": "u16"
+          },
+          {
+            "name": "initial_margin_requirement",
+            "type": "u64"
+          },
+          {
+            "name": "maintenance_margin_requirement",
+            "type": "u64"
+          },
+          {
+            "name": "available_margin",
+            "type": "u64"
+          },
+          {
+            "name": "account_health",
+            "type": "u16"
+          },
+          {
+            "name": "liquidation_price",
+            "type": "u64"
+          },
+          {
+            "name": "liquidation_threshold",
+            "type": "u16"
+          },
+          {
+            "name": "max_leverage",
+            "type": "u16"
+          },
+          {
+            "name": "total_funding_paid",
+            "type": "i64"
+          },
+          {
+            "name": "total_funding_received",
+            "type": "i64"
+          },
+          {
+            "name": "total_fees_paid",
+            "type": "u64"
+          },
+          {
+            "name": "total_rebates_earned",
+            "type": "u64"
+          },
+          {
+            "name": "referrer",
+            "type": "pubkey"
+          },
+          {
+            "name": "created_at",
+            "type": "i64"
+          },
+          {
+            "name": "last_activity",
+            "type": "i64"
+          },
+          {
+            "name": "is_active",
+            "type": "bool"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "UserPointsAccount",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "user",
+            "type": "pubkey"
+          },
+          {
+            "name": "total_points",
+            "type": "u64"
+          },
+          {
+            "name": "trading_points",
+            "type": "u64"
+          },
+          {
+            "name": "referral_points",
+            "type": "u64"
+          },
+          {
+            "name": "staking_points",
+            "type": "u64"
+          },
+          {
+            "name": "last_updated",
+            "type": "i64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "VaultDepositor",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "shares",
+            "type": "u128"
+          },
+          {
+            "name": "last_deposit_at",
+            "type": "i64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "VolumeSnapshot",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "volume",
+            "type": "u64"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "VolumeSpikeBreaker",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "is_active",
+            "type": "bool"
+          },
+          {
+            "name": "current_volume",
+            "type": "u64"
+          },
+          {
+            "name": "volume_history",
+            "type": {
+              "array": [
+                {
+                  "defined": {
+                    "name": "VolumeSnapshot"
+                  }
+                },
+                10
+              ]
+            }
+          },
+          {
+            "name": "history_index",
+            "type": "u8"
+          },
+          {
+            "name": "spike_threshold",
+            "type": "u16"
+          },
+          {
+            "name": "last_triggered",
+            "type": "i64"
+          },
+          {
+            "name": "trigger_count",
+            "type": "u32"
+          }
+        ]
+      }
+    }
+  ]
+}

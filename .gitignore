@@ -1,0 +1,17 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+target/
+
+# Environment configurations and secrets
+.env
+.env.*
+*.keypair.json
+
+# IDE/OS files
+.DS_Store
+.idea/
+.vscode/
