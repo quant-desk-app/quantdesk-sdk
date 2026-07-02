@@ -210,7 +210,7 @@ main() {
     
     echo -e "\n${BLUE}🔗 Useful commands:${NC}"
     echo -e "  Start all services: ./start-all-services.sh"
-    echo -e "  Check service health: curl http://localhost:3002/health"
+    echo -e "  Check service health: curl \"\${QD_API_URL:-https://api.quantdesk.app}/health\""
     echo -e "  View logs: tail -f logs/*.log"
     echo -e "  Stop services: pkill -f 'node.*backend'"
     

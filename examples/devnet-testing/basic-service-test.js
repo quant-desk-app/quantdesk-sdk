@@ -4,6 +4,9 @@ import { Connection, Keypair, PublicKey } from '@solana/web3.js';
 const QUANTDESK_PROGRAM_ID = 'C2T3UnvGdHwEkspXJG7JyAhwo6VKQEKjN6eCq69guYSw';
 const DEVNET_RPC = 'https://api.devnet.solana.com';
 
+// Gateway origin — configure via QD_API_URL, falls back to the public gateway
+const QD_API = process.env.QD_API_URL || 'https://api.quantdesk.app';
+
 /**
  * Basic Service Health Testing
  * Tests the health of all QuantDesk services
@@ -12,8 +15,8 @@ async function testServiceHealth() {
   console.log('🧪 Testing QuantDesk Service Health...\n');
   
   const services = [
-    { name: 'Backend API', url: 'http://localhost:3002/api/health' },
-    { name: 'Data Ingestion', url: 'http://localhost:3003/health' }
+    { name: 'Gateway API', url: `${QD_API}/api/health` },
+    { name: 'Data Health', url: `${QD_API}/health` }
   ];
   
   const results = await Promise.allSettled(
@@ -111,10 +114,10 @@ async function testRealTimeData() {
   console.log('📊 Testing Real-Time Data APIs...\n');
   
   const endpoints = [
-    { name: 'Latest Prices', url: 'http://localhost:3003/api/prices/latest' },
-    { name: 'Whale Transactions', url: 'http://localhost:3003/api/whales/recent?limit=5' },
-    { name: 'Market Summary', url: 'http://localhost:3003/api/market/summary' },
-    { name: 'Wallet Balance', url: 'http://localhost:3003/api/wallet/balance' }
+    { name: 'Latest Prices', url: `${QD_API}/api/prices/latest` },
+    { name: 'Whale Transactions', url: `${QD_API}/api/whales/recent?limit=5` },
+    { name: 'Market Summary', url: `${QD_API}/api/market/summary` },
+    { name: 'Wallet Balance', url: `${QD_API}/api/wallet/balance` }
   ];
   
   for (const endpoint of endpoints) {
