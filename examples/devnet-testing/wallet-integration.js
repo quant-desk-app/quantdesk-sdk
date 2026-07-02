@@ -26,9 +26,10 @@ async function walletIntegrationExample() {
     const balance = await connection.getBalance(wallet.publicKey);
     console.log(`✅ Wallet funded: ${balance / 1e9} SOL`);
     
-    // Test wallet with data ingestion service
-    console.log('🔄 Testing wallet with data ingestion service...');
-    const response = await fetch('http://localhost:3003/api/wallet/balance');
+    // Test wallet against the gateway (configure via QD_API_URL)
+    console.log('🔄 Testing wallet balance via gateway...');
+    const QD_API = process.env.QD_API_URL || 'https://api.quantdesk.app';
+    const response = await fetch(`${QD_API}/api/wallet/balance`);
     const data = await response.json();
     
     if (data.success) {

@@ -1,0 +1,5 @@
+# Optional native build scripts pulled in transitively (via ws) are not required
+# for the SDK. Explicitly ignore them so installs and `pnpm run build` are clean.
+ignoredBuiltDependencies:
+  - bufferutil
+  - utf-8-validate

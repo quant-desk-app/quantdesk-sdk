@@ -12,7 +12,7 @@
 const axios = require('axios');
 
 class QuantDeskDemo {
-  constructor(apiUrl = 'http://localhost:3002', apiKey = null) {
+  constructor(apiUrl = process.env.QD_API_URL || 'https://api.quantdesk.app', apiKey = null) {
     this.apiUrl = apiUrl;
     this.apiKey = apiKey;
     this.authToken = null;
@@ -202,7 +202,8 @@ class QuantDeskDemo {
       console.log('🔌 Testing WebSocket connection...');
       
       const WebSocket = require('ws');
-      const ws = new WebSocket('ws://localhost:3002/ws');
+      const wsUrl = this.apiUrl.replace(/^http/, 'ws') + '/ws';
+      const ws = new WebSocket(wsUrl);
       
       ws.on('open', () => {
         console.log('✅ WebSocket connected successfully');
