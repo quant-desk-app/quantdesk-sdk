@@ -540,15 +540,15 @@ pnpm test -- --coverage
 
 ## 📞 **Support and Resources**
 
-### **Documentation**
-- [QuantDesk SDK Documentation](https://github.com/dextrorsal/quantdesk-v0.1/tree/main/sdk)
-- [API Reference](https://github.com/dextrorsal/quantdesk-v0.1/tree/main/docs/api)
-- [Examples](https://github.com/dextrorsal/quantdesk-v0.1/tree/main/examples)
+### Documentation
+- [QuantDesk SDK Documentation](https://github.com/quant-desk-app/quantdesk-sdk/tree/main/typescript)
+- [API Reference](https://docs.quantdesk.app/docs/intro)
+- [Examples](https://github.com/quant-desk-app/quantdesk-sdk/tree/main/examples)
 
-### **Community**
-- [GitHub Issues](https://github.com/dextrorsal/quantdesk-v0.1/issues)
+### Community
+- [GitHub Issues](https://github.com/quant-desk-app/quantdesk-sdk/issues)
 - [Discord Community](https://discord.gg/quantdesk)
-- [Documentation](https://docs.quantdesk.com)
+- [Documentation](https://docs.quantdesk.app)
 
 ---
 

@@ -34,11 +34,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/quantdesk/quantdesk.git",
+    "url": "https://github.com/quant-desk-app/quantdesk-sdk.git",
     "directory": "examples"
   },
   "bugs": {
-    "url": "https://github.com/quantdesk/quantdesk/issues"
+    "url": "https://github.com/quant-desk-app/quantdesk-sdk/issues"
   },
-  "homepage": "https://github.com/quantdesk/quantdesk#readme"
+  "homepage": "https://github.com/quant-desk-app/quantdesk-sdk#readme"
 }
