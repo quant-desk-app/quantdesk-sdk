@@ -218,19 +218,19 @@ export class QuantDeskAPIClient {
   }
 
   /**
-   * Chat with MIKEY-AI with error handling
+   * Chat with the AI agent with error handling
    */
-  async chatWithMIKEY(message: string, context?: any): Promise<any> {
+  async chatWithAgent(message: string, context?: any): Promise<any> {
     this.ensureInitialized();
     this.validateMessage(message);
     
     try {
-      const response = await this.client.chatWithMIKEY(message, context);
-      console.log(`💬 Received response from MIKEY-AI`);
+      const response = await this.client.chatWithAgent(message, context);
+      console.log(`💬 Received response from AI agent`);
       return response;
     } catch (error) {
-      console.error('❌ Failed to chat with MIKEY-AI:', error);
-      throw new Error(`Failed to chat with MIKEY-AI: ${error.message}`);
+      console.error('❌ Failed to chat with AI agent:', error);
+      throw new Error(`Failed to chat with AI agent: ${error.message}`);
     }
   }
 
@@ -332,9 +332,9 @@ export async function runAPIClientExample() {
     const analysis = await apiClient.getAIAnalysis('SOL-PERP');
     console.log('AI sentiment:', analysis.sentiment);
     
-    // Chat with MIKEY
-    const chatResponse = await apiClient.chatWithMIKEY('What do you think about SOL-PERP?');
-    console.log('MIKEY response:', chatResponse.response);
+    // Chat with the AI agent
+    const chatResponse = await apiClient.chatWithAgent('What do you think about SOL-PERP?');
+    console.log('Agent response:', chatResponse.response);
     
   } catch (error) {
     console.error('API Client example failed:', error);

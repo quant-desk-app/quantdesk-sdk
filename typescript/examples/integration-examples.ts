@@ -100,9 +100,9 @@ export class QuantDeskIntegration {
       const signals = await this.apiClient.getTradingSignals();
       console.log(`Trading Signals: ${signals.length}`);
       
-      // Chat with MIKEY
-      const chatResponse = await this.apiClient.chatWithMIKEY('What is your analysis of the current market?');
-      console.log(`MIKEY Response: ${chatResponse.response.substring(0, 100)}...`);
+      // Chat with the AI agent
+      const chatResponse = await this.apiClient.chatWithAgent('What is your analysis of the current market?');
+      console.log(`Agent Response: ${chatResponse.response.substring(0, 100)}...`);
       
     } catch (error) {
       console.error('❌ AI integration failed:', error);

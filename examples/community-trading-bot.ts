@@ -8,7 +8,7 @@
  */
 
 import { QuantDeskSDK } from '@quantdesk/sdk';
-import { MarketAnalysisAgent, RiskManagementAgent } from './examples/mikey-ai-agents';
+import { MarketAnalysisAgent, RiskManagementAgent } from './agents';
 import { EventEmitter } from 'events';
 
 interface TradingBotConfig {

@@ -143,7 +143,7 @@ export class SDKExamplesTestRunner {
           timestamp: new Date().toISOString()
         };
       },
-      chatWithMIKEY: async (message: string, context?: any) => {
+      chatWithAgent: async (message: string, context?: any) => {
         return {
           response: 'Based on my analysis, SOL-PERP shows strong bullish momentum with increasing volume.',
           confidence: 0.88,
@@ -368,8 +368,8 @@ export class SDKExamplesTestRunner {
       const riskAssessment = await apiClient.getRiskAssessment();
       console.log(`Risk level: ${riskAssessment.overallRisk}`);
       
-      const chatResponse = await apiClient.chatWithMIKEY('What do you think about SOL-PERP?');
-      console.log(`MIKEY response: ${chatResponse.response.substring(0, 50)}...`);
+      const chatResponse = await apiClient.chatWithAgent('What do you think about SOL-PERP?');
+      console.log(`Agent response: ${chatResponse.response.substring(0, 50)}...`);
       
       this.testResults.set('api-client', {
         name: 'API Client Example',
