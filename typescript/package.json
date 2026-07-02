@@ -42,11 +42,11 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-org/quantdesk-protocol.git",
-    "directory": "sdk/typescript"
+    "url": "https://github.com/quant-desk-app/quantdesk-sdk.git",
+    "directory": "typescript"
   },
   "bugs": {
-    "url": "https://github.com/your-org/quantdesk-protocol/issues"
+    "url": "https://github.com/quant-desk-app/quantdesk-sdk/issues"
   },
   "homepage": "https://quantdesk.app"
 }
